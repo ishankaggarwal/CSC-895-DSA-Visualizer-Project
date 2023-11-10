@@ -1,33 +1,13 @@
-.side-menu {
+.sideMenu {
   width: 20%;
-  background-color: rgba(106, 147, 160, 1);
-  padding: 30px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
-  color: rgba(255, 251, 251, 1);
-  height:100vh;
 }
 
-.menu-option {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
-  background-color: rgba(53, 111, 130, 1);
-  width: 100%; 
-  padding: 10px; 
+.menuOption {
+  background-color: transparent;
+  color: black;
+  margin: 10px;
 }
 
-.menu-option i {
-  margin-left: auto;
-}
-
-.sub-menu {
-  list-style-type: none;
-  padding: 0;
-  margin-left: 0; 
-}
-
-.sub-menu li {
-  padding: 15px 10px; 
+.menuOption:hover{
+  background-color: rebeccapurple;
 }
