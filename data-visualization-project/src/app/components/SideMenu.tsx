@@ -81,7 +81,7 @@ const SideMenu: React.FC = () => {
   const {
     setVisualizationCategory,
     setVisualizationOption
-  } : any = useContext(AppContext);
+  } = useContext(AppContext);
 
   const onClick = (visualizationCategory: number,visualizationOption: number) =>{
     setVisualizationCategory(visualizationCategory);

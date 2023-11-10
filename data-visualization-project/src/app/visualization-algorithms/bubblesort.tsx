@@ -49,10 +49,10 @@ export const BubbleSort = (array: number[])=>{
                 indexI: j,
                 indexJ: j+1
             })
-            if(swapped==false)
-            {
-                break;
-            }
+        }
+        if(swapped==false)
+        {
+            break;
         }
     }
 

@@ -8,15 +8,25 @@ import AppContext from '@/context';
 
 export default function Home() {
 
-  const [visualizationCategory,setVisualizationCategory] = useState(0);
+  const [visualizationCategory,setVisualizationCategory] = useState<number>(0);
   const [visualizationOption,setVisualizationOption] = useState(0);
+  const [speedValue,setSpeedValue] = useState(1);
+  const [isPlaying,setIsPlaying] = useState(true);
+  const [input,setInput] = useState<any>([]);
+
 
   return (
     <AppContext.Provider value={{
       visualizationCategory,
       setVisualizationCategory,
       visualizationOption,
-      setVisualizationOption
+      setVisualizationOption,
+      speedValue,
+      setSpeedValue,
+      isPlaying,
+      setIsPlaying,
+      input,
+      setInput
     }}>
     <div className={styles.main}>
       <Header />

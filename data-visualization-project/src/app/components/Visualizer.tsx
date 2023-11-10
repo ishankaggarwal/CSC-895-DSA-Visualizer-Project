@@ -1,71 +1,38 @@
-import { useContext, useEffect, useState } from "react";
-import { ArrayVisualizationInterface } from "../interfaces/ArrayVIsualizationInterface";
-import { Button } from "react-bootstrap";
-import { BubbleSort } from "../visualization-algorithms/bubblesort";
+import { useContext} from "react";
 import AppContext from "@/context";
 import ArrayVisualizer from "./VisualizationComponents/ArrayVisualizer";
+import SpeedComponent from "./Utils/SpeedComponent";
+import PlayPauseComponent from "./Utils/PlayPause";
+import InputBox from "./Utils/InputBox";
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
 
 const Visualizer = () =>{
 
     const {
-        visualizationCategory,
-        visualizationOption
-    } : any = useContext(AppContext);
-
-    const [array,setArray] = useState<number[]>([8,7,6,5,4,3,2,1]);
-    const [arrayVisualization,setArrayVisualization] = useState<ArrayVisualizationInterface[]>([]);
-    useEffect(()=>{
-        const newArray = array.map((value,index)=>{
-            const newValue : ArrayVisualizationInterface = {
-                'color': 'transparent',
-                value: value,
-                index: index
-            }
-            return newValue;
-        })
-        setArrayVisualization(newArray);
-    },[array])
-
-    const visualizeArray = async () =>{
-        const animations = BubbleSort(array);
-        console.log(animations);
-        for(let i=0;i<animations.length;i++)
-        {
-            const animation = animations[i];
-            let newArray = [...arrayVisualization];
-            const {
-                colorI,
-                colorJ,
-                valueI,
-                valueJ,
-                indexI,
-                indexJ
-            } = animation;
-            newArray[indexI].value=valueI;
-            newArray[indexI].color=colorI;
-            newArray[indexJ].value=valueJ;
-            newArray[indexJ].color = colorJ;
-            setArrayVisualization(newArray);
-            await sleep(1000);
-            
-        }
-    }
+        visualizationCategory
+    }  = useContext(AppContext);
     return(
         <div style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'space-evenly',
             width: '80%',
-            height: '100vh',
-            flexDirection: 'column'
+            flexDirection: 'column',
         }}>
+            <div style={{
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                display: 'flex',
+
+            }}>
+            <SpeedComponent/>
+            <PlayPauseComponent/>
+            </div>
             {
                 visualizationCategory ===0 && <ArrayVisualizer/>
             }
+            <InputBox/>
         </div>
     )
 }
