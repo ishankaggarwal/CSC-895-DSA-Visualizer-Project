@@ -1,6 +1,8 @@
 import { ArrayVisualizationAnimationInterface, ArrayVisualizationInterface } from "@/app/interfaces/ArrayVIsualizationInterface";
 import { BubbleSort } from "@/app/visualization-algorithms/bubblesort";
 import AppContext from "@/context";
+import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 
@@ -71,12 +73,20 @@ const ArrayVisualizer = () =>{
 
     const visualizeArray = async (array: number[]) =>{
         let animations : ArrayVisualizationAnimationInterface[] = [];
-        createArrayVisualization([...array]);
         if(visualizationOption===0)
         {
             animations = BubbleSort([...array]);
         }
-        setAnimations(animations);
+        createArrayVisualization([...array]);
+        if(animationsRef.current.length>0)
+        {
+            setAnimations([]);
+        }
+        else{
+            setAnimations(animations);
+        }
+
+
     }
 
     const processAnimations = async ()=>{
@@ -140,10 +150,12 @@ const ArrayVisualizer = () =>{
                 marginTop: '30px'
             }}>
                 <Button onClick={async ()=>{
-                    console.log(input);
                     await visualizeArray(input);
                 }}>
-                    Visualize
+                    {
+                        animationsRef.current.length >0  ? <FontAwesomeIcon icon={faStop}/> :
+                        <FontAwesomeIcon icon={faPlay}/>
+}
                 </Button>
             </div>
         </div>
