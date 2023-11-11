@@ -14,7 +14,8 @@ const ArrayVisualizer = () =>{
         visualizationOption,
         speedValue,
         isPlaying,
-        input
+        input,
+        setMarkers
     }  = useContext(AppContext);
 
     const [arrayVisualization,setArrayVisualization] = useState<ArrayVisualizationInterface[]>([]);
@@ -23,10 +24,11 @@ const ArrayVisualizer = () =>{
     const [isPlayingValue,setIsPlayingValue] = useState<boolean>(true);
     const speedRef = useRef<number>(speed);
     const isPlayingRef = useRef<boolean>(isPlayingValue);
+    const animationsRef = useRef<ArrayVisualizationAnimationInterface[]>([]);
 
     useEffect(()=>{
         isPlayingRef.current = isPlayingValue;
-        processAnimations(animations);
+        processAnimations();
     },[isPlayingValue])
 
     useEffect(() => {
@@ -45,6 +47,14 @@ const ArrayVisualizer = () =>{
         createArrayVisualization(input);
         setAnimations([]);
     },[input])
+
+    useEffect(()=>{
+        async function rerender(){
+            animationsRef.current = [...animations];
+            await processAnimations();
+        }
+        rerender();
+    },[animations]);
 
 
     const createArrayVisualization = (array: number[]) =>{
@@ -67,16 +77,14 @@ const ArrayVisualizer = () =>{
             animations = BubbleSort([...array]);
         }
         setAnimations(animations);
-        processAnimations(animations);
     }
 
-    const processAnimations = async (animations: ArrayVisualizationAnimationInterface[])=>{
-        const newAnimations = [...animations];
-        while(newAnimations.length>0)
+    const processAnimations = async ()=>{
+        if(animationsRef.current.length>0)
         {
             if(isPlayingRef.current)
             {
-                const animation = newAnimations.shift();
+                const animation = animationsRef.current.shift();
                 if(animation)
                 {
                 let newArray = [...arrayVisualization];
@@ -86,22 +94,22 @@ const ArrayVisualizer = () =>{
                     valueI,
                     valueJ,
                     indexI,
-                    indexJ
+                    indexJ,
+                    currentLineMarkers
                 } = animation;
                 newArray[indexI].value=valueI;
                 newArray[indexI].color=colorI;
                 newArray[indexJ].value=valueJ;
                 newArray[indexJ].color = colorJ;
+                setMarkers(currentLineMarkers);
                 setArrayVisualization(newArray);
-                setAnimations(newAnimations);
                 await sleep(1000/speedRef.current);
+                setAnimations(animationsRef.current);
                 }
-            }
-            else{
-                break;
             }
         }
     }
+
     return(
         <div style={{
             display: 'flex',
@@ -132,6 +140,7 @@ const ArrayVisualizer = () =>{
                 marginTop: '30px'
             }}>
                 <Button onClick={async ()=>{
+                    console.log(input);
                     await visualizeArray(input);
                 }}>
                     Visualize

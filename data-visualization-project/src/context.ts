@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, createContext, useState } from "react";
+import { IMarker } from "react-ace";
 
 interface ContextInterface{
     visualizationCategory: number;
@@ -11,6 +12,10 @@ interface ContextInterface{
     setIsPlaying: Dispatch<SetStateAction<boolean>>;
     input: any;
     setInput : Dispatch<SetStateAction<any>>;
+    editorValue: string;
+    setEditorValue: Dispatch<SetStateAction<string>>;
+    markers: IMarker[];
+    setMarkers: Dispatch<SetStateAction<IMarker[]>>;
 }
 
 
@@ -33,6 +38,14 @@ const AppContext = createContext<ContextInterface>({
     },
     input: "",
     setInput: function (value: SetStateAction<any>): void {
+        throw new Error("Function not implemented.");
+    },
+    editorValue: "",
+    setEditorValue: function (value: SetStateAction<string>): void {
+        throw new Error("Function not implemented.");
+    },
+    markers: [],
+    setMarkers: function (value: SetStateAction<IMarker[]>): void {
         throw new Error("Function not implemented.");
     }
 });

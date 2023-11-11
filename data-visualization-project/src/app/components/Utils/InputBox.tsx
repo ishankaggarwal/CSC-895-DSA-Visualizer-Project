@@ -8,7 +8,7 @@ const InputBox = () =>{
 
     const {
         setInput,
-        visualizationCategory
+        visualizationCategory,
     } = useContext(AppContext);
 
 

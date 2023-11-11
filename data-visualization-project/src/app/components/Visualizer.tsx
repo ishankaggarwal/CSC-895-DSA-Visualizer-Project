@@ -4,6 +4,7 @@ import ArrayVisualizer from "./VisualizationComponents/ArrayVisualizer";
 import SpeedComponent from "./Utils/SpeedComponent";
 import PlayPauseComponent from "./Utils/PlayPause";
 import InputBox from "./Utils/InputBox";
+import CodeEditor from "./Utils/CodeEditor";
 
 
 const Visualizer = () =>{
@@ -33,6 +34,7 @@ const Visualizer = () =>{
                 visualizationCategory ===0 && <ArrayVisualizer/>
             }
             <InputBox/>
+            <CodeEditor/>
         </div>
     )
 }

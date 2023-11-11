@@ -5,6 +5,7 @@ import SideMenu from './components/SideMenu';
 import Visualizer from './components/Visualizer';
 import styles from './page.module.css';
 import AppContext from '@/context';
+import { IMarker } from 'react-ace';
 
 export default function Home() {
 
@@ -13,6 +14,8 @@ export default function Home() {
   const [speedValue,setSpeedValue] = useState(1);
   const [isPlaying,setIsPlaying] = useState(true);
   const [input,setInput] = useState<any>([]);
+  const [editorValue, setEditorValue] = useState('');
+  const [markers,setMarkers] = useState<IMarker[]>([]);
 
 
   return (
@@ -26,7 +29,11 @@ export default function Home() {
       isPlaying,
       setIsPlaying,
       input,
-      setInput
+      setInput,
+      editorValue,
+      setEditorValue,
+      markers,
+      setMarkers
     }}>
     <div className={styles.main}>
       <Header />
