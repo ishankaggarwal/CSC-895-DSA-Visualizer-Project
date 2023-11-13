@@ -1,7 +1,9 @@
 import { ArrayVisualizationAnimationInterface, ArrayVisualizationInterface } from "@/app/interfaces/ArrayVIsualizationInterface";
 import { BubbleSort } from "@/app/visualization-algorithms/bubblesort";
 import AppContext from "@/context";
-import { useContext, useEffect, useState } from "react";
+import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 
 function sleep(ms: number) {
@@ -11,14 +13,51 @@ function sleep(ms: number) {
 const ArrayVisualizer = () =>{
 
     const {
-        visualizationOption
-    } : any = useContext(AppContext);
-    const [array,setArray] = useState<number[]>([3,2,1]);
+        visualizationOption,
+        speedValue,
+        isPlaying,
+        input,
+        setMarkers
+    }  = useContext(AppContext);
+
     const [arrayVisualization,setArrayVisualization] = useState<ArrayVisualizationInterface[]>([]);
+    const [animations,setAnimations] = useState<ArrayVisualizationAnimationInterface[]>([]);
+    const [speed, setSpeed] = useState<number>(1);
+    const [isPlayingValue,setIsPlayingValue] = useState<boolean>(true);
+    const speedRef = useRef<number>(speed);
+    const isPlayingRef = useRef<boolean>(isPlayingValue);
+    const animationsRef = useRef<ArrayVisualizationAnimationInterface[]>([]);
+
     useEffect(()=>{
-        const newArrayVisualization = createArrayVisualization(array);
-        setArrayVisualization(newArrayVisualization);
-    },[array])
+        isPlayingRef.current = isPlayingValue;
+        processAnimations();
+    },[isPlayingValue])
+
+    useEffect(() => {
+        speedRef.current = speed;
+    }, [speed]);
+
+    useEffect(()=>{
+        setIsPlayingValue(isPlaying);
+   },[isPlaying])
+
+    useEffect(()=>{
+        setSpeed(speedValue);
+   },[speedValue])
+
+    useEffect(()=>{
+        createArrayVisualization(input);
+        setAnimations([]);
+    },[input])
+
+    useEffect(()=>{
+        async function rerender(){
+            animationsRef.current = [...animations];
+            await processAnimations();
+        }
+        rerender();
+    },[animations]);
+
 
     const createArrayVisualization = (array: number[]) =>{
         const newArray = array.map((value,index)=>{
@@ -29,54 +68,71 @@ const ArrayVisualizer = () =>{
             }
             return newValue;
         })
-        return newArray;
+        setArrayVisualization(newArray);
     }
 
     const visualizeArray = async (array: number[]) =>{
         let animations : ArrayVisualizationAnimationInterface[] = [];
-        let newArrayVisualization = createArrayVisualization([...array]);
-        setArrayVisualization(newArrayVisualization);
         if(visualizationOption===0)
         {
             animations = BubbleSort([...array]);
         }
-        processAnimations(animations,newArrayVisualization);
+        createArrayVisualization([...array]);
+        if(animationsRef.current.length>0)
+        {
+            setAnimations([]);
+        }
+        else{
+            setAnimations(animations);
+        }
+
+
     }
 
-    const processAnimations = async (animations: ArrayVisualizationAnimationInterface[],arrayVisualization: ArrayVisualizationInterface[])=>{
-        for(let i=0;i<animations.length;i++)
+    const processAnimations = async ()=>{
+        if(animationsRef.current.length>0)
         {
-            const animation = animations[i];
-            console.log([...arrayVisualization]);
-            let newArray = [...arrayVisualization];
-            const {
-                colorI,
-                colorJ,
-                valueI,
-                valueJ,
-                indexI,
-                indexJ
-            } = animation;
-            newArray[indexI].value=valueI;
-            newArray[indexI].color=colorI;
-            newArray[indexJ].value=valueJ;
-            newArray[indexJ].color = colorJ;
-            setArrayVisualization(newArray);
-            arrayVisualization = [...newArray];
-            await sleep(1000);
+            if(isPlayingRef.current)
+            {
+                const animation = animationsRef.current.shift();
+                if(animation)
+                {
+                let newArray = [...arrayVisualization];
+                const {
+                    colorI,
+                    colorJ,
+                    valueI,
+                    valueJ,
+                    indexI,
+                    indexJ,
+                    currentLineMarkers
+                } = animation;
+                newArray[indexI].value=valueI;
+                newArray[indexI].color=colorI;
+                newArray[indexJ].value=valueJ;
+                newArray[indexJ].color = colorJ;
+                setMarkers(currentLineMarkers);
+                setArrayVisualization(newArray);
+                await sleep(1000/speedRef.current);
+                setAnimations(animationsRef.current);
+                }
+            }
         }
     }
+
     return(
         <div style={{
             display: 'flex',
-            alignItems: 'center',
             justifyContent: 'center',
-            width: '80%',
-            height: '100vh',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            alignItems: 'center',
+            maxWidth: '100%',
+            overflow: 'scroll',
+            padding: '10px'
         }}>
             <div style={{
-                display: 'flex'
+                display: 'flex',
+                alignSelf: 'flex-start'
             }}>
             {
                 arrayVisualization.map(value=>{
@@ -95,12 +151,15 @@ const ArrayVisualizer = () =>{
             }
             </div>
             <div style={{
-                marginTop: '30px'
+                marginTop: '30px',
             }}>
                 <Button onClick={async ()=>{
-                    await visualizeArray(array);
+                    await visualizeArray(input);
                 }}>
-                    Visualize
+                    {
+                        animationsRef.current.length >0  ? <FontAwesomeIcon icon={faStop}/> :
+                        <FontAwesomeIcon icon={faPlay}/>
+}
                 </Button>
             </div>
         </div>

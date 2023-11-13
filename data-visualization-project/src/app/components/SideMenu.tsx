@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Accordion, Button, ListGroup } from 'react-bootstrap';
+import { Accordion, Button, Dropdown, ListGroup } from 'react-bootstrap';
 import '../../../styles/sideMenu.css';
 import AppContext from '@/context';
 
@@ -81,7 +81,7 @@ const SideMenu: React.FC = () => {
   const {
     setVisualizationCategory,
     setVisualizationOption
-  } : any = useContext(AppContext);
+  } = useContext(AppContext);
 
   const onClick = (visualizationCategory: number,visualizationOption: number) =>{
     setVisualizationCategory(visualizationCategory);
@@ -89,30 +89,34 @@ const SideMenu: React.FC = () => {
   }
 
   return (
-    <Accordion defaultActiveKey="0" style={{
-      width: '20%'
+    <div style={{
+      display: 'flex',
+      width: '70%',
+      justifyContent: 'space-evenly',
+      position: 'absolute',
     }}>
-      {
-        items.map((item,index)=>{
-          return(
-            <Accordion.Item eventKey={index.toString()} key={item.categoryValue}>
-              <Accordion.Header>{item.category}</Accordion.Header>
-              <Accordion.Body>
-                <ListGroup>
-                  {
-                    item.subCategories.map((subItem)=>{
-                      return(<Button key={subItem.subCategoryValue} className='menuOption' onClick={()=>{
-                        onClick(item.categoryValue,subItem.subCategoryValue);
-                      }}>{subItem.subCategoryName}</Button>)
-                    })
-                  }
-                </ListGroup>
-              </Accordion.Body>
-            </Accordion.Item>
-          )
-        })
-      }
-    </Accordion>
+            {
+              items.map((item,index)=>{
+                return(
+                <Dropdown>
+                      <Dropdown.Toggle >
+                        {item.category}
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                      {
+                          item.subCategories.map((subItem)=>{
+                            return(<Dropdown.Item key={subItem.subCategoryValue} onClick={()=>{
+                              onClick(item.categoryValue,subItem.subCategoryValue);
+                            }}>{subItem.subCategoryName}</Dropdown.Item>)
+                          })
+                        }
+                      </Dropdown.Menu>
+                    </Dropdown>
+                )
+              })
+            }
+    </div>
   );
 };
 

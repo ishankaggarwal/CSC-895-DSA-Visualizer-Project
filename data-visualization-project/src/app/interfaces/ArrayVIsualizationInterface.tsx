@@ -1,3 +1,5 @@
+import { IMarker } from "react-ace";
+
 export interface ArrayVisualizationInterface{
     value: number;
     index: number;
@@ -11,6 +13,7 @@ export interface ArrayVisualizationAnimationInterface{
     indexJ: number;
     colorI: string;
     colorJ: string;
+    currentLineMarkers : IMarker[]; 
 }
 
 const ArrayVisualizationInterfaceComponent = ()=>{
