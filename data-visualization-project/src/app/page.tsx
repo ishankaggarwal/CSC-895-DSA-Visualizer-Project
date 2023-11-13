@@ -6,6 +6,8 @@ import Visualizer from './components/Visualizer';
 import styles from './page.module.css';
 import AppContext from '@/context';
 import { IMarker } from 'react-ace';
+import InputBox from './components/Utils/InputBox';
+import CodeEditor from './components/Utils/CodeEditor';
 
 export default function Home() {
 
@@ -39,6 +41,13 @@ export default function Home() {
       <Header />
       <SideMenu />
       <Visualizer/>
+      <div style={{
+                width: '30%',
+                position: 'absolute',
+                right: 0
+            }}>
+            <CodeEditor/>
+            </div>
     </div>
     </AppContext.Provider>
   );

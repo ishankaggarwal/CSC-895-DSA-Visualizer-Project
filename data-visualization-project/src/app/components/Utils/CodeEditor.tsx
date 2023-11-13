@@ -49,9 +49,6 @@ const CodeEditor = () =>{
         name="UNIQUE_ID_OF_DIV"
         value={editorValue}
         readOnly={true}
-        style={{
-            width: '90%'
-        }}
         markers={markers}
         />
     )

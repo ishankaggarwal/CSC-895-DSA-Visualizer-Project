@@ -18,8 +18,13 @@ const Visualizer = () =>{
         <div style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-evenly',
+            justifyContent: 'center',
             flexDirection: 'column',
+            position: 'absolute',
+            top: 100,
+            left: 0,
+            width: '70%',
+            height: '100vh'
         }}>
             <div style={{
                 width: '100%',
@@ -37,7 +42,6 @@ const Visualizer = () =>{
                 visualizationCategory === 1 && <BinaryTreeVisualizer/>
             }
             <InputBox/>
-            <CodeEditor/>
         </div>
     )
 }
