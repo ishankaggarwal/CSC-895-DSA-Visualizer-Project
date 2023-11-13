@@ -90,7 +90,7 @@ const SideMenu: React.FC = () => {
 
   return (
     <Accordion defaultActiveKey="0" style={{
-      width: '20%'
+      width: '100%'
     }}>
       {
         items.map((item,index)=>{

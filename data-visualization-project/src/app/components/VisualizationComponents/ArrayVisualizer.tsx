@@ -123,12 +123,16 @@ const ArrayVisualizer = () =>{
     return(
         <div style={{
             display: 'flex',
-            alignItems: 'center',
             justifyContent: 'center',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            alignItems: 'center',
+            maxWidth: '100%',
+            overflow: 'scroll',
+            padding: '10px'
         }}>
             <div style={{
-                display: 'flex'
+                display: 'flex',
+                alignSelf: 'flex-start'
             }}>
             {
                 arrayVisualization.map(value=>{
@@ -147,7 +151,7 @@ const ArrayVisualizer = () =>{
             }
             </div>
             <div style={{
-                marginTop: '30px'
+                marginTop: '30px',
             }}>
                 <Button onClick={async ()=>{
                     await visualizeArray(input);

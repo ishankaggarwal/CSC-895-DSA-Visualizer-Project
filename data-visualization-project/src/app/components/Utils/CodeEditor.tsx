@@ -36,6 +36,10 @@ const CodeEditor = () =>{
         {
             fetchFile('/codefiles/bubblesort.py');
         }
+        if(visualizationCategory===1 && visualizationOption===0)
+        {
+          fetchFile('/codefiles/inordertraversal.py');
+        }
     },[visualizationCategory,visualizationOption]);
 
     return(

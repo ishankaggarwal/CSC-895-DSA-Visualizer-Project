@@ -5,6 +5,8 @@ import SpeedComponent from "./Utils/SpeedComponent";
 import PlayPauseComponent from "./Utils/PlayPause";
 import InputBox from "./Utils/InputBox";
 import CodeEditor from "./Utils/CodeEditor";
+import BinaryTree from "./Utils/BinaryTree";
+import BinaryTreeVisualizer from "./VisualizationComponents/BinaryTreeVisualizer";
 
 
 const Visualizer = () =>{
@@ -17,7 +19,6 @@ const Visualizer = () =>{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-evenly',
-            width: '80%',
             flexDirection: 'column',
         }}>
             <div style={{
@@ -25,13 +26,15 @@ const Visualizer = () =>{
                 alignItems: 'center',
                 justifyContent: 'space-evenly',
                 display: 'flex',
-
             }}>
             <SpeedComponent/>
             <PlayPauseComponent/>
             </div>
             {
                 visualizationCategory ===0 && <ArrayVisualizer/>
+            }
+            {
+                visualizationCategory === 1 && <BinaryTreeVisualizer/>
             }
             <InputBox/>
             <CodeEditor/>

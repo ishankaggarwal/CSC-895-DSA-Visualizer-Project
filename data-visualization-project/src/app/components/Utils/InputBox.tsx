@@ -13,7 +13,7 @@ const InputBox = () =>{
 
 
     const processInput = () =>{
-        if(visualizationCategory===0)
+        if(visualizationCategory===0 || visualizationCategory===1)
         {
             setInput(convertInputToArray(inputTextBox));
         }

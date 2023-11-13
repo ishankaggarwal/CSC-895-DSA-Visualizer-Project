@@ -37,12 +37,8 @@ export default function Home() {
     }}>
     <div className={styles.main}>
       <Header />
-      <div style={{
-        display: 'flex'
-      }}>
       <SideMenu />
       <Visualizer/>
-      </div>
     </div>
     </AppContext.Provider>
   );
