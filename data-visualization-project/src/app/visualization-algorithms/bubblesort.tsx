@@ -1,7 +1,7 @@
-import { ArrayVisualizationAnimationInterface } from "../interfaces/ArrayVIsualizationInterface";
+import { BubbleSortArrayVisualizationAnimationInterface } from "../interfaces/BubbleSortArrayVIsualizationInterface";
 
 export const BubbleSort = (array: number[])=>{
-    let animations : ArrayVisualizationAnimationInterface[] = [];
+    let animations : BubbleSortArrayVisualizationAnimationInterface[] = [];
     const n = array.length;
     let swapped = false;
     for (let i=0;i<n;i++)

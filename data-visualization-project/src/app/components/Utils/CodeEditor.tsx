@@ -36,9 +36,25 @@ const CodeEditor = () =>{
         {
             fetchFile('/codefiles/bubblesort.py');
         }
+        if(visualizationCategory===0 && visualizationOption===1)
+        {
+            fetchFile('/codefiles/insertionsort.py');
+        }
+        if(visualizationCategory===0 && visualizationOption===2)
+        {
+            fetchFile('/codefiles/selectionsort.py');
+        }
         if(visualizationCategory===1 && visualizationOption===0)
         {
           fetchFile('/codefiles/inordertraversal.py');
+        }
+        if(visualizationCategory===1 && visualizationOption===1)
+        {
+          fetchFile('/codefiles/preordertraversal.py');
+        }
+        if(visualizationCategory===1 && visualizationOption===2)
+        {
+          fetchFile('/codefiles/postordertraversal.py');
         }
     },[visualizationCategory,visualizationOption]);
 

@@ -1,13 +1,12 @@
-import { ArrayVisualizationAnimationInterface, ArrayVisualizationInterface } from "@/app/interfaces/ArrayVIsualizationInterface";
-import { BubbleSort } from "@/app/visualization-algorithms/bubblesort";
 import AppContext from "@/context";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
-import BinaryTreeComponent, { BinaryTree, BinaryTreeAnimationInterface, Link, Node, NodeTree } from "../Utils/BinaryTree";
-import * as d3 from 'd3';
+import { BinaryTree, BinaryTreeAnimationInterface, Link, Node, NodeTree } from "../Utils/BinaryTree";
 import { traverseTreeInorder } from "@/app/visualization-algorithms/inordertraversal";
+import { traverseTreePreorder } from "@/app/visualization-algorithms/preordertraversal";
+import { traverseTreePostOrder } from "@/app/visualization-algorithms/postorder";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -140,6 +139,14 @@ const BinaryTreeVisualizer = () =>{
         if(visualizationOption===0)
         {
             traverseTreeInorder(root,animations);
+        }
+        if(visualizationOption===1)
+        {
+            traverseTreePreorder(root,animations);
+        }
+        if(visualizationOption===2)
+        {
+            traverseTreePostOrder(root,animations);
         }
         if(animationsRef.current.length>0)
         {

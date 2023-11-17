@@ -1,12 +1,12 @@
 import { IMarker } from "react-ace";
 
-export interface ArrayVisualizationInterface{
+export interface BubbleSortArrayVisualizationInterface{
     value: number;
     index: number;
     color: string;
 }
 
-export interface ArrayVisualizationAnimationInterface{
+export interface BubbleSortArrayVisualizationAnimationInterface{
     valueI: number;
     valueJ: number;
     indexI: number;
@@ -16,10 +16,10 @@ export interface ArrayVisualizationAnimationInterface{
     currentLineMarkers : IMarker[]; 
 }
 
-const ArrayVisualizationInterfaceComponent = ()=>{
+const BubbleSortArrayVisualizationInterfaceComponent = ()=>{
     return(
         <div></div>
     )
 }
 
-export default ArrayVisualizationInterfaceComponent;
+export default BubbleSortArrayVisualizationInterfaceComponent;

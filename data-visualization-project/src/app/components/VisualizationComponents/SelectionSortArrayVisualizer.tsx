@@ -1,8 +1,9 @@
-import { ArrayVisualizationAnimationInterface, ArrayVisualizationInterface } from "@/app/interfaces/ArrayVIsualizationInterface";
-import { BubbleSort } from "@/app/visualization-algorithms/bubblesort";
+import { SelectionSortArrayVisualizationAnimationInterface, SelectionSortArrayVisualizationInterface } from "@/app/interfaces/SelectionSortArrayVisualizationInterface";
+import { SelectionSort } from "@/app/visualization-algorithms/selectionsort";
 import AppContext from "@/context";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { minIndex } from "d3";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 
@@ -10,7 +11,7 @@ function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-const ArrayVisualizer = () =>{
+const SelectionSortArrayVisualizer = () =>{
 
     const {
         visualizationOption,
@@ -20,13 +21,15 @@ const ArrayVisualizer = () =>{
         setMarkers
     }  = useContext(AppContext);
 
-    const [arrayVisualization,setArrayVisualization] = useState<ArrayVisualizationInterface[]>([]);
-    const [animations,setAnimations] = useState<ArrayVisualizationAnimationInterface[]>([]);
+    const [arrayVisualization,setArrayVisualization] = useState<SelectionSortArrayVisualizationInterface[]>([]);
+    const [animations,setAnimations] = useState<SelectionSortArrayVisualizationAnimationInterface[]>([]);
     const [speed, setSpeed] = useState<number>(1);
     const [isPlayingValue,setIsPlayingValue] = useState<boolean>(true);
     const speedRef = useRef<number>(speed);
     const isPlayingRef = useRef<boolean>(isPlayingValue);
-    const animationsRef = useRef<ArrayVisualizationAnimationInterface[]>([]);
+    const animationsRef = useRef<SelectionSortArrayVisualizationAnimationInterface[]>([]);
+    const [minValue,setMinValue] = useState("");
+    const [minIndex,setMinIndex] = useState("");
 
     useEffect(()=>{
         isPlayingRef.current = isPlayingValue;
@@ -61,7 +64,7 @@ const ArrayVisualizer = () =>{
 
     const createArrayVisualization = (array: number[]) =>{
         const newArray = array.map((value,index)=>{
-            const newValue : ArrayVisualizationInterface = {
+            const newValue : SelectionSortArrayVisualizationInterface = {
                 'color': 'transparent',
                 value: value,
                 index: index
@@ -72,11 +75,12 @@ const ArrayVisualizer = () =>{
     }
 
     const visualizeArray = async (array: number[]) =>{
-        let animations : ArrayVisualizationAnimationInterface[] = [];
-        if(visualizationOption===0)
+        let animations : SelectionSortArrayVisualizationAnimationInterface[] = [];
+        if(visualizationOption===2)
         {
-            animations = BubbleSort([...array]);
+            animations = SelectionSort([...array]);
         }
+        console.log(animations);
         createArrayVisualization([...array]);
         if(animationsRef.current.length>0)
         {
@@ -105,7 +109,9 @@ const ArrayVisualizer = () =>{
                     valueJ,
                     indexI,
                     indexJ,
-                    currentLineMarkers
+                    currentLineMarkers,
+                    minIndex,
+                    minValue
                 } = animation;
                 newArray[indexI].value=valueI;
                 newArray[indexI].color=colorI;
@@ -113,6 +119,8 @@ const ArrayVisualizer = () =>{
                 newArray[indexJ].color = colorJ;
                 setMarkers(currentLineMarkers);
                 setArrayVisualization(newArray);
+                setMinValue(minValue);
+                setMinIndex(minIndex);
                 await sleep(1000/speedRef.current);
                 setAnimations(animationsRef.current);
                 }
@@ -151,6 +159,20 @@ const ArrayVisualizer = () =>{
             }
             </div>
             <div style={{
+                            padding: '20px',
+                            borderStyle: 'solid',
+                            borderWidth: '2px',
+                            fontSize: '35px',
+                            margin: '10px',
+                        }} >
+                            <div>
+                Min Value: {minValue}
+                </div>
+                <div>
+                Min Index: {minIndex}
+                </div>
+            </div>
+            <div style={{
                 marginTop: '30px',
             }}>
                 <Button onClick={async ()=>{
@@ -166,4 +188,4 @@ const ArrayVisualizer = () =>{
     )
 }
 
-export default ArrayVisualizer;
+export default SelectionSortArrayVisualizer;
