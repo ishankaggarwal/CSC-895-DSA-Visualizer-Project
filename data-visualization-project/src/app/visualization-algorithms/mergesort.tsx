@@ -30,10 +30,18 @@ export function mergeSort(array: number[],map: Map<number,NodeTree>,i: number,j:
     nodeTree.colorJ = 'yellow';
     animations.push({
         nodeTrees: [deepCopy(nodeTree)],
-        currentLineMarkers: []
+        currentLineMarkers: [{startRow: 4, startCol: 0, endRow: 4, endCol: 1000, className: 'myMarker',type: 'text'}]
     })
     const diff = Math.pow(2,height-i-1);
+    animations.push({
+        nodeTrees: [],
+        currentLineMarkers: [{startRow: 13, startCol: 0, endRow: 14, endCol: 1000, className: 'myMarker',type: 'text'}]
+    })
     const leftArray  = mergeSort(array.slice(0,mid),map,i+1,j-diff,height,animations);
+    animations.push({
+        nodeTrees: [],
+        currentLineMarkers: [{startRow: 16, startCol: 0, endRow: 16, endCol: 1000, className: 'myMarker',type: 'text'}]
+    })
     const rightArray = mergeSort(array.slice(mid),map,i+1,j+diff,height,animations);
     nodeTree.indexI = mid;
     nodeTree.indexJ = mid;
@@ -41,7 +49,7 @@ export function mergeSort(array: number[],map: Map<number,NodeTree>,i: number,j:
     nodeTree.colorJ = 'transparent';
     animations.push({
         nodeTrees: [deepCopy(nodeTree)],
-        currentLineMarkers: []
+        currentLineMarkers: [{startRow: 4, startCol: 0, endRow: 4, endCol: 1000, className: 'myMarker',type: 'text'}]
     })
     let newArray : number[] = [];
     let k=0;
@@ -66,7 +74,7 @@ export function mergeSort(array: number[],map: Map<number,NodeTree>,i: number,j:
         nodeTreeRight.colorJ = 'purple';
         animations.push({
             nodeTrees: [deepCopy(nodeTreeLeft),deepCopy(nodeTreeRight)],
-            currentLineMarkers: []
+            currentLineMarkers: [{startRow: 21, startCol: 0, endRow: 21, endCol: 1000, className: 'myMarker',type: 'text'}]
         });
         if(leftArray[k]<=rightArray[l])
         {
@@ -76,7 +84,7 @@ export function mergeSort(array: number[],map: Map<number,NodeTree>,i: number,j:
             nodeTreeLeft.colorJ = 'red';
             animations.push({
                 nodeTrees: [deepCopy(nodeTreeLeft)],
-                currentLineMarkers: []
+                currentLineMarkers: [{startRow: 22, startCol: 0, endRow: 22, endCol: 1000, className: 'myMarker',type: 'text'}]
             });
             newArray.push(leftArray[k]);
             k+=1;
@@ -88,7 +96,7 @@ export function mergeSort(array: number[],map: Map<number,NodeTree>,i: number,j:
             nodeTreeRight.colorJ = 'red';
             animations.push({
                 nodeTrees: [deepCopy(nodeTreeRight)],
-                currentLineMarkers: []
+                currentLineMarkers: [{startRow: 26, startCol: 0, endRow: 26, endCol: 1000, className: 'myMarker',type: 'text'}]
             });
             newArray.push(rightArray[l]);
             l+=1;
@@ -120,7 +128,7 @@ export function mergeSort(array: number[],map: Map<number,NodeTree>,i: number,j:
         nodeTreeLeft.colorJ = 'purple';
         animations.push({
             nodeTrees: [deepCopy(nodeTreeLeft)],
-            currentLineMarkers: []
+            currentLineMarkers: [{startRow: 31, startCol: 0, endRow: 31, endCol: 1000, className: 'myMarker',type: 'text'}]
         });
         nodeTreeLeft.indexI = k;
         nodeTreeLeft.indexJ = k;
@@ -128,7 +136,7 @@ export function mergeSort(array: number[],map: Map<number,NodeTree>,i: number,j:
         nodeTreeLeft.colorJ = 'red';
         animations.push({
             nodeTrees: [deepCopy(nodeTreeLeft)],
-            currentLineMarkers: []
+            currentLineMarkers: [{startRow: 32, startCol: 0, endRow: 32, endCol: 1000, className: 'myMarker',type: 'text'}]
         });
         newArray.push(leftArray[k]);
         nodeTree.value = deepCopy(newArray);
@@ -155,7 +163,7 @@ export function mergeSort(array: number[],map: Map<number,NodeTree>,i: number,j:
         nodeTreeRight.colorJ = 'purple';
         animations.push({
             nodeTrees: [deepCopy(nodeTreeRight)],
-            currentLineMarkers: []
+            currentLineMarkers: [{startRow: 36, startCol: 0, endRow: 36, endCol: 1000, className: 'myMarker',type: 'text'}]
         });
         nodeTreeRight.indexI = l;
         nodeTreeRight.indexJ = l;
@@ -163,7 +171,7 @@ export function mergeSort(array: number[],map: Map<number,NodeTree>,i: number,j:
         nodeTreeRight.colorJ = 'red';
         animations.push({
             nodeTrees: [deepCopy(nodeTreeRight)],
-            currentLineMarkers: []
+            currentLineMarkers: [{startRow: 37, startCol: 0, endRow: 37, endCol: 1000, className: 'myMarker',type: 'text'}]
         });
         newArray.push(rightArray[l]);
         nodeTree.value = deepCopy(newArray);

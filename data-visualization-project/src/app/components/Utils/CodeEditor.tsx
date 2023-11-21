@@ -44,6 +44,14 @@ const CodeEditor = () =>{
         {
             fetchFile('/codefiles/selectionsort.py');
         }
+        if(visualizationCategory===0 && visualizationOption===3)
+        {
+            fetchFile('/codefiles/mergesort.py');
+        }
+        if(visualizationCategory===0 && visualizationOption===4)
+        {
+            fetchFile('/codefiles/quicksort.py');
+        }
         if(visualizationCategory===1 && visualizationOption===0)
         {
           fetchFile('/codefiles/inordertraversal.py');

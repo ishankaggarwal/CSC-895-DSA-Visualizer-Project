@@ -29,6 +29,7 @@ const InsertionSortArrayVisualizer = () =>{
     const isPlayingRef = useRef<boolean>(isPlayingValue);
     const animationsRef = useRef<InsertionSortArrayVisualizationAnimationInterface[]>([]);
     const [keyValue,setKeyValue] = useState("");
+    const [barHeight,setBarHeight] = useState<number>(0);
 
     useEffect(()=>{
         isPlayingRef.current = isPlayingValue;
@@ -62,15 +63,18 @@ const InsertionSortArrayVisualizer = () =>{
 
 
     const createArrayVisualization = (array: number[]) =>{
+        let maxValue = Number.NEGATIVE_INFINITY;
         const newArray = array.map((value,index)=>{
             const newValue : InsertionSortArrayVisualizationInterface = {
                 'color': 'transparent',
                 value: value,
                 index: index
             }
+            maxValue = Math.max(maxValue,value);
             return newValue;
         })
         setArrayVisualization(newArray);
+        setBarHeight(500/maxValue);
     }
 
     const visualizeArray = async (array: number[]) =>{
@@ -139,16 +143,29 @@ const InsertionSortArrayVisualizer = () =>{
                 alignSelf: 'flex-start'
             }}>
             {
-                arrayVisualization.map(value=>{
+                arrayVisualization.map((value,index)=>{
                     return (
+                        <div style={{
+                            margin: '10px',
+                            alignSelf: 'flex-end'
+                        }}>
+                                <div style={{
+                                width: '100%',
+                                height: value.value*barHeight,
+                                backgroundColor: 'green',
+                            }}>
+
+                            </div>
                         <div style={{
                             padding: '20px',
                             borderStyle: 'solid',
                             borderWidth: '2px',
                             fontSize: '35px',
-                            backgroundColor: value.color
-                        }} key={value.index}>
+                            backgroundColor: value.color,
+                            width: 'fit-content'
+                        }} key={value.index} id={"value"+index}>
                             {value.value}
+                            </div>
                             </div>
                     )
                 })

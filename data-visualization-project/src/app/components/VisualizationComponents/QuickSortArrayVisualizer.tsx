@@ -3,22 +3,30 @@ import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
+import { traverseTreeInorder } from "@/app/visualization-algorithms/inordertraversal";
+import { traverseTreePreorder } from "@/app/visualization-algorithms/preordertraversal";
+import { traverseTreePostOrder } from "@/app/visualization-algorithms/postorder";
 import { MergeSortArrayVisualizationAnimationInterface } from "@/app/interfaces/MergeSortArrayVisualizationInterface";
 import { DivideAndConquerArray, Link, NodeTree } from "../Utils/DivideAndConquerArrayTree";
 import { mergeSort } from "@/app/visualization-algorithms/mergesort";
+import { Pivot, QuickSortArrayVisualizationAnimationInterface } from "@/app/interfaces/QuickSortArrayVisualizationInterface";
+import { quickSort } from "@/app/visualization-algorithms/quicksort";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-export interface NodeWidthAndHeight{
-    id: number;
-    width: number;
-    height: number
-}
+function deepCopyMap<K, V>(original: Map<K, V>): Map<K, V> {
+    const newMap = new Map<K, V>();
+    original.forEach((value, key) => {
+      // Assuming the values are objects, you might need to adjust this
+      // for other deep copy logic based on your use case
+      newMap.set(key, JSON.parse(JSON.stringify(value)));
+    });
+    return newMap;
+  }
 
-
-const MergeSortVisualizer = () =>{
+const QuickSortVisualizer = () =>{
 
 
     const {
@@ -40,13 +48,15 @@ const MergeSortVisualizer = () =>{
     const [height,setHeight] = useState<number>(300);
     const [width,setWidth] = useState<number>(300);
 
-    const animationsRef = useRef<MergeSortArrayVisualizationAnimationInterface[]>([]);
+    const animationsRef = useRef<QuickSortArrayVisualizationAnimationInterface[]>([]);
 
-    const [animations,setAnimations] = useState<MergeSortArrayVisualizationAnimationInterface[]>([]);
+    const [animations,setAnimations] = useState<QuickSortArrayVisualizationAnimationInterface[]>([]);
 
     const initialCreateRef = useRef<boolean>(false);
 
     const divideAndConquerTree = useRef<DivideAndConquerArray>();
+
+    const [pivotMap,setPivotMap] = useState<Map<number,Pivot>>(new Map<number,Pivot>());
 
 
     useEffect(()=>{
@@ -79,6 +89,21 @@ const MergeSortVisualizer = () =>{
         rerender();
     },[animations]);
 
+    useEffect(()=>{
+        createPivots(nodes);
+    },[nodes]);
+
+    const createPivots = (nodes: NodeTree[])=>{
+        let pivotMap : Map<number,Pivot> =  new Map<number,Pivot>();
+        nodes.forEach(node=>{
+            pivotMap.set(node.id,{
+                pivotID: node.id,
+                pivotValue: "",
+                pivotIndex: "",
+            })
+        })
+    }
+
 
     const createTree = (arr:number[])=>{
         if(animationsRef.current.length>0)
@@ -86,20 +111,19 @@ const MergeSortVisualizer = () =>{
             setAnimations([]);
         }
         initialCreateRef.current = true;
-        const arrayTree = new DivideAndConquerArray(arr,"mergesort");
-        setHeight(arrayTree.returnHeight());
-        setWidth(arrayTree.returnWidth());
-        console.log(arrayTree.nodes);
+        const arrayTree = new DivideAndConquerArray(arr,"quicksort");
+        setHeight(arrayTree.returnHeightQuickSort());
+        setWidth(arrayTree.returnWidthForQuickSort());
         setNodes(arrayTree.nodes);
+        setPivotMap(new Map<number,Pivot>());
         divideAndConquerTree.current = arrayTree;
     }
 
     const visualizeTree = async (array: number[]) =>{
-        console.log(array);
-        let animations : MergeSortArrayVisualizationAnimationInterface[] = [];
+        let animations : QuickSortArrayVisualizationAnimationInterface[] = [];
         if(divideAndConquerTree.current!==undefined)
         {
-            mergeSort(array,divideAndConquerTree.current?.Map,0,divideAndConquerTree.current.returnInitialJPosition(),divideAndConquerTree.current.height,animations);
+            quickSort(array,divideAndConquerTree.current?.Map,0,divideAndConquerTree.current.returnInitialJPositionQuickSort(),divideAndConquerTree.current.heightForQuickSort,animations);
         }
         console.log(animations);
         if(animationsRef.current.length>0)
@@ -121,32 +145,41 @@ const MergeSortVisualizer = () =>{
             {
                 const animation = animationsRef.current.shift();
                 let newNodes = [...nodes];
-                console.log(newNodes);
+                let newMap = deepCopyMap(pivotMap);
                 if(animation)
                 {
                 const {
                     nodeTrees,
-                    currentLineMarkers
+                    currentLineMarkers,
+                    pivotId,
+                    pivotIndex,
+                    pivotValue
                 } = animation;
-                console.log(nodeTrees);
                 for(let i=0;i<newNodes.length;i++)
                 {
                     for(let j=0;j<nodeTrees.length;j++)
                     {
-                        if(newNodes[i].id===nodeTrees[j].id)
+                        if(nodeTrees[j]!==undefined && newNodes[i].id===nodeTrees[j].id)
                         {
                             newNodes[i].colorI = nodeTrees[j].colorI;
                             newNodes[i].colorJ = nodeTrees[j].colorJ;
                             newNodes[i].value = nodeTrees[j].value;
                             newNodes[i].indexI = nodeTrees[j].indexI;
                             newNodes[i].indexJ = nodeTrees[j].indexJ;
-                            console.log(newNodes[i].value);
                         }
                     }
                 }
+                const newPivot : Pivot ={
+                    pivotID: pivotId,
+                    pivotValue: pivotValue,
+                    pivotIndex: pivotIndex
+                }
+                newMap.set(pivotId,newPivot);
+                console.log(newMap);
+                setPivotMap(newMap);
                 setMarkers(currentLineMarkers);
                 setNodes(newNodes);
-                await sleep(1000/speedRef.current);
+                await sleep(3000/speedRef.current);
                 setAnimations(animationsRef.current);
                 }
             }
@@ -184,6 +217,8 @@ const MergeSortVisualizer = () =>{
                             position: 'absolute',
                         }} id={"node"+node.id}>
                             {
+                                <>
+                                {
                                node.value.map((value,index)=>{
                                     return(
                                         <div style={{
@@ -196,10 +231,26 @@ const MergeSortVisualizer = () =>{
                                         </div>
                                     )
                                 }) 
+                                }
+                                {
+                                node.value.length >0 &&    <div style={{
+                                    padding: '10px',
+                                    borderWidth: '1px',
+                                    borderStyle: 'solid',
+                                    marginLeft: '10px'
+                                }}>
+                                    Pivot Value: {pivotMap.get(node.id)?.pivotValue}
+                                </div>
+                                }
+                                </>
+                                
                             }
                             </div>
                     )
                 })
+            }
+            {
+
             }
             </div>
             <div style={{
@@ -218,4 +269,4 @@ const MergeSortVisualizer = () =>{
     )
 }
 
-export default MergeSortVisualizer;
+export default QuickSortVisualizer;

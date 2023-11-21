@@ -28,6 +28,7 @@ const BubbleSortArrayVisualizer = () =>{
     const speedRef = useRef<number>(speed);
     const isPlayingRef = useRef<boolean>(isPlayingValue);
     const animationsRef = useRef<BubbleSortArrayVisualizationAnimationInterface[]>([]);
+    const [barHeight,setBarHeight] = useState<number>(0);
 
     useEffect(()=>{
         isPlayingRef.current = isPlayingValue;
@@ -61,15 +62,18 @@ const BubbleSortArrayVisualizer = () =>{
 
 
     const createArrayVisualization = (array: number[]) =>{
+        let maxValue = Number.NEGATIVE_INFINITY;
         const newArray = array.map((value,index)=>{
             const newValue : BubbleSortArrayVisualizationInterface = {
                 'color': 'transparent',
                 value: value,
                 index: index
             }
+            maxValue = Math.max(maxValue,value);
             return newValue;
         })
         setArrayVisualization(newArray);
+        setBarHeight(500/maxValue);
     }
 
     const visualizeArray = async (array: number[]) =>{
@@ -140,16 +144,29 @@ const BubbleSortArrayVisualizer = () =>{
                 alignSelf: 'flex-start'
             }}>
             {
-                arrayVisualization.map(value=>{
+                arrayVisualization.map((value,index)=>{
                     return (
+                        <div style={{
+                            margin: '10px',
+                            alignSelf: 'flex-end'
+                        }}>
+                                <div style={{
+                                width: '100%',
+                                height: value.value*barHeight,
+                                backgroundColor: 'green',
+                            }}>
+
+                            </div>
                         <div style={{
                             padding: '20px',
                             borderStyle: 'solid',
                             borderWidth: '2px',
                             fontSize: '35px',
-                            backgroundColor: value.color
-                        }} key={value.index}>
+                            backgroundColor: value.color,
+                            width: 'fit-content'
+                        }} key={value.index} id={"value"+index}>
                             {value.value}
+                            </div>
                             </div>
                     )
                 })

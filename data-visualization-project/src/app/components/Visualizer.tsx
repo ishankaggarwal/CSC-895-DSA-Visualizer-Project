@@ -11,6 +11,7 @@ import BubbleSortArrayVisualizer from "./VisualizationComponents/BubbleSortArray
 import InsertionSortArrayVisualizer from "./VisualizationComponents/InsertionSortArrayVIsualizer";
 import SelectionSortArrayVisualizer from "./VisualizationComponents/SelectionSortArrayVisualizer";
 import MergeSortVisualizer from "./VisualizationComponents/MergeSortArrayVisualizer";
+import QuickSortVisualizer from "./VisualizationComponents/QuickSortArrayVisualizer";
 
 
 const Visualizer = () =>{
@@ -29,7 +30,6 @@ const Visualizer = () =>{
             top: 100,
             left: 0,
             width: '70%',
-            height: '100vh'
         }}>
             <div style={{
                 width: '100%',
@@ -49,8 +49,11 @@ const Visualizer = () =>{
             {
                 (visualizationCategory ===0 && visualizationOption===2) && <SelectionSortArrayVisualizer/>
             }
-                        {
+            {
                 (visualizationCategory ===0 && visualizationOption===3) && <MergeSortVisualizer/>
+            }
+                        {
+                (visualizationCategory ===0 && visualizationOption===4) && <QuickSortVisualizer/>
             }
             {
                 visualizationCategory === 1 && <BinaryTreeVisualizer/>
