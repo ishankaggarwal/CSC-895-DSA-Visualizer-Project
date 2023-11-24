@@ -133,6 +133,7 @@ const SelectionSortArrayVisualizer = () =>{
     }
 
     return(
+        <>
         <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -175,7 +176,8 @@ const SelectionSortArrayVisualizer = () =>{
                 })
             }
             </div>
-            <div style={{
+        </div>
+        <div style={{
                             padding: '20px',
                             borderStyle: 'solid',
                             borderWidth: '2px',
@@ -198,10 +200,10 @@ const SelectionSortArrayVisualizer = () =>{
                     {
                         animationsRef.current.length >0  ? <FontAwesomeIcon icon={faStop}/> :
                         <FontAwesomeIcon icon={faPlay}/>
-}
+                        }
                 </Button>
             </div>
-        </div>
+        </>
     )
 }
 

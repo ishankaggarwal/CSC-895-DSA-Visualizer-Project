@@ -104,6 +104,10 @@ const BinaryTreeVisualizer = () =>{
     },[animations]);
 
     const createTree = (arr:number[])=>{
+        if(animationsRef.current.length>0)
+        {
+            setAnimations([]);
+        }
         initialCreateRef.current = true;
         const binaryTree = new BinaryTree();
         const nodes = binaryTree.createTree(arr);
@@ -128,8 +132,10 @@ const BinaryTreeVisualizer = () =>{
             )
         })
         const links = binaryTreeRef.current?.createLinks(nodesWidthAndHeight);
+        console.log(links);
         if(links)
         {
+            console.log("Links Set")
         setLinks(links);
         }
     }
@@ -154,6 +160,7 @@ const BinaryTreeVisualizer = () =>{
             createTree(input);
         }
         else{
+            createTree(input);
             setAnimations(animations);
         }
     }
@@ -206,11 +213,11 @@ const BinaryTreeVisualizer = () =>{
         }
         else{
             initialCreateRef.current = true;
-            createTree(input);
         }
     }
 
     return(
+        <>
         <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -260,7 +267,8 @@ const BinaryTreeVisualizer = () =>{
                         </svg>
             }
             </div>
-            <div style={{
+        </div>
+        <div style={{
                 marginTop: '30px',
             }}>
                 <Button onClick={async ()=>{
@@ -270,10 +278,10 @@ const BinaryTreeVisualizer = () =>{
                     {
                         animationsRef.current.length >0  ? <FontAwesomeIcon icon={faStop}/> :
                         <FontAwesomeIcon icon={faPlay}/>
-}
+                        }
                 </Button>
             </div>
-        </div>
+        </>
     )
 }
 

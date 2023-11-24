@@ -129,6 +129,7 @@ const InsertionSortArrayVisualizer = () =>{
     }
 
     return(
+        <>
         <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -171,7 +172,8 @@ const InsertionSortArrayVisualizer = () =>{
                 })
             }
             </div>
-            <div style={{
+        </div>
+        <div style={{
                             padding: '20px',
                             borderStyle: 'solid',
                             borderWidth: '2px',
@@ -180,7 +182,7 @@ const InsertionSortArrayVisualizer = () =>{
                         }} >
                 Key Value: {keyValue}
             </div>
-            <div style={{
+        <div style={{
                 marginTop: '30px',
             }}>
                 <Button onClick={async ()=>{
@@ -189,10 +191,10 @@ const InsertionSortArrayVisualizer = () =>{
                     {
                         animationsRef.current.length >0  ? <FontAwesomeIcon icon={faStop}/> :
                         <FontAwesomeIcon icon={faPlay}/>
-}
+                        }
                 </Button>
             </div>
-        </div>
+        </>
     )
 }
 

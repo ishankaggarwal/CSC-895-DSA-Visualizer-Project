@@ -12,6 +12,7 @@ import InsertionSortArrayVisualizer from "./VisualizationComponents/InsertionSor
 import SelectionSortArrayVisualizer from "./VisualizationComponents/SelectionSortArrayVisualizer";
 import MergeSortVisualizer from "./VisualizationComponents/MergeSortArrayVisualizer";
 import QuickSortVisualizer from "./VisualizationComponents/QuickSortArrayVisualizer";
+import DjikstraAlgorithmVisualizer from "./VisualizationComponents/DjikstraAlgorithmVisualizer";
 
 
 const Visualizer = () =>{
@@ -57,6 +58,9 @@ const Visualizer = () =>{
             }
             {
                 visualizationCategory === 1 && <BinaryTreeVisualizer/>
+            }
+            {
+                visualizationCategory === 2 && <DjikstraAlgorithmVisualizer/>
             }
             <InputBox/>
         </div>

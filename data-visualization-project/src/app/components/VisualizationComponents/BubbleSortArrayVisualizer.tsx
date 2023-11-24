@@ -130,6 +130,7 @@ const BubbleSortArrayVisualizer = () =>{
     }
 
     return(
+        <>
         <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -172,7 +173,8 @@ const BubbleSortArrayVisualizer = () =>{
                 })
             }
             </div>
-            <div style={{
+        </div>
+        <div style={{
                 marginTop: '30px',
             }}>
                 <Button onClick={async ()=>{
@@ -184,7 +186,7 @@ const BubbleSortArrayVisualizer = () =>{
 }
                 </Button>
             </div>
-        </div>
+        </>
     )
 }
 

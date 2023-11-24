@@ -157,6 +157,7 @@ const MergeSortVisualizer = () =>{
     }
 
     return(
+        <>
         <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -202,7 +203,8 @@ const MergeSortVisualizer = () =>{
                 })
             }
             </div>
-            <div style={{
+        </div>
+        <div style={{
                 marginTop: '30px',
             }}>
                 <Button onClick={async ()=>{
@@ -211,10 +213,10 @@ const MergeSortVisualizer = () =>{
                     {
                         animationsRef.current.length >0  ? <FontAwesomeIcon icon={faStop}/> :
                         <FontAwesomeIcon icon={faPlay}/>
-}
+                        }
                 </Button>
             </div>
-        </div>
+        </>
     )
 }
 

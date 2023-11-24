@@ -190,6 +190,7 @@ const QuickSortVisualizer = () =>{
     }
 
     return(
+        <>
         <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -253,7 +254,8 @@ const QuickSortVisualizer = () =>{
 
             }
             </div>
-            <div style={{
+        </div>
+        <div style={{
                 marginTop: '30px',
             }}>
                 <Button onClick={async ()=>{
@@ -265,7 +267,7 @@ const QuickSortVisualizer = () =>{
 }
                 </Button>
             </div>
-        </div>
+        </>
     )
 }
 
