@@ -102,7 +102,7 @@ export class DivideAndConquerArray{
     }
 
     createNodesOfArray(array: number[],i: number,j:number){
-        let nodeTree = new NodeTree(j,[],i*this.distance,j*this.distance);
+        let nodeTree = new NodeTree(j,[],i*(this.distance+50),j*(this.distance+50));
         this.Map.set(j,nodeTree);
         this.nodes.push(nodeTree);
         if(array.length===1)
@@ -120,7 +120,7 @@ export class DivideAndConquerArray{
         {
             return;
         }
-        let nodeTree = new NodeTree(j,[],i*this.distanceQuickSort,j*this.distanceQuickSort);
+        let nodeTree = new NodeTree(j,[],i*(this.distanceQuickSort+50),j*(this.distanceQuickSort+50));
         this.Map.set(j,nodeTree);
         this.nodes.push(nodeTree);
         const pivot = array[array.length - 1];
@@ -142,11 +142,11 @@ export class DivideAndConquerArray{
 
 
     returnHeight(){
-        return (this.height+1)*this.distance;
+        return (this.height+1)*(this.distance+50);
       }
   
       returnWidth(){
-        return  (Math.pow(2,this.height+1) - 1)*this.distance;
+        return  (Math.pow(2,this.height+1) - 1)*(this.distance+50);
       }
 
       returnInitialJPosition(){
@@ -156,11 +156,11 @@ export class DivideAndConquerArray{
       }
 
       returnHeightQuickSort(){
-        return (this.heightForQuickSort+1)*this.distanceQuickSort;
+        return (this.heightForQuickSort+1)*(this.distanceQuickSort+50);
       }
   
       returnWidthForQuickSort(){
-        return  (Math.pow(2,this.heightForQuickSort+1) - 1)*this.distanceQuickSort;
+        return  (Math.pow(2,this.heightForQuickSort+1) - 1)*(this.distanceQuickSort+50);
       }
 
       returnInitialJPositionQuickSort(){

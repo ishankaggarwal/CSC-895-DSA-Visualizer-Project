@@ -57,6 +57,7 @@ const QuickSortVisualizer = () =>{
     const divideAndConquerTree = useRef<DivideAndConquerArray>();
 
     const [pivotMap,setPivotMap] = useState<Map<number,Pivot>>(new Map<number,Pivot>());
+    const [barHeight,setBarHeight] = useState(0);
 
 
     useEffect(()=>{
@@ -116,6 +117,7 @@ const QuickSortVisualizer = () =>{
         setWidth(arrayTree.returnWidthForQuickSort());
         setNodes(arrayTree.nodes);
         setPivotMap(new Map<number,Pivot>());
+        setBarHeight(arrayTree.distanceQuickSort/Math.max(...arr));
         divideAndConquerTree.current = arrayTree;
     }
 
@@ -216,12 +218,24 @@ const QuickSortVisualizer = () =>{
                             top: node.i,
                             left: node.j,
                             position: 'absolute',
+                            height: (divideAndConquerTree.current?.distanceQuickSort+50),
                         }} id={"node"+node.id}>
                             {
                                 <>
                                 {
                                node.value.map((value,index)=>{
                                     return(
+                                        <div style={{
+                                            margin: '10px',
+                                            alignSelf: 'flex-end'
+                                        }}>
+                                                <div style={{
+                                                width: '100%',
+                                                height: value*barHeight,
+                                                backgroundColor: 'green',
+                                            }}>
+                
+                                            </div>
                                         <div style={{
                                             padding: '10px',
                                             borderWidth: '1px',
@@ -230,17 +244,31 @@ const QuickSortVisualizer = () =>{
                                         }}>
                                             {value}
                                         </div>
+                                        </div>
                                     )
                                 }) 
                                 }
                                 {
-                                node.value.length >0 &&    <div style={{
+                                node.value.length >0 &&
+                                <div style={{
+                                    margin: '10px',
+                                    alignSelf: 'flex-end',
+                                }}>
+                                            <div style={{
+                                                width: '100%',
+                                                height: pivotMap.get(node.id) ? pivotMap.get(node.id)?.pivotValue * barHeight : 0,
+                                                backgroundColor: 'green',
+                                            }}>
+                
+                                            </div>
+                                <div style={{
                                     padding: '10px',
                                     borderWidth: '1px',
                                     borderStyle: 'solid',
-                                    marginLeft: '10px'
+                                    whiteSpace: 'nowrap'
                                 }}>
                                     Pivot Value: {pivotMap.get(node.id)?.pivotValue}
+                                </div>
                                 </div>
                                 }
                                 </>

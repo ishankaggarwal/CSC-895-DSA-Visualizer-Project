@@ -64,6 +64,14 @@ const CodeEditor = () =>{
         {
           fetchFile('/codefiles/postordertraversal.py');
         }
+        if(visualizationCategory===2 && visualizationOption===0)
+        {
+          fetchFile('/codefiles/dfs.py');
+        }
+        if(visualizationCategory===2 && visualizationOption===1)
+        {
+          fetchFile('/codefiles/bfs.py');
+        }
     },[visualizationCategory,visualizationOption]);
 
     return(

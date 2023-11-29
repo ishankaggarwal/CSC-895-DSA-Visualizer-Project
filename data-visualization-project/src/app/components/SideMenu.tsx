@@ -57,20 +57,8 @@ export const items = [
         subCategoryValue: 0,
       },
       {
-        subCategoryName: 'Breadth-First Search',
+        subCategoryName: 'Breadth First Search',
         subCategoryValue: 1,
-      },
-      {
-        subCategoryName: 'Minimum Spanning Tree Algorithms',
-        subCategoryValue: 2,
-      },
-      {
-        subCategoryName: 'Single Source Shortest Path Algorithms',
-        subCategoryValue: 3,
-      },
-      {
-        subCategoryName: 'Topological Sorting',
-        subCategoryValue: 4,
       }
     ]
   }

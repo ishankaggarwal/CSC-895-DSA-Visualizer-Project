@@ -1,10 +1,11 @@
 'use client';
+import AppContext from "@/context";
 import { faArrowDown, faArrowLeft, faArrowRight, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Konva from "konva";
 import dynamic from "next/dynamic";
-import React, { ForwardedRef, useRef, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import React, { ForwardedRef, useContext, useRef, useState } from "react";
+import { Button, Form, Modal } from "react-bootstrap";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import { Circle, Layer, Rect, Stage, Text } from "react-konva";
 import Xarrow, {useXarrow, Xwrapper} from 'react-xarrows';
@@ -46,10 +47,11 @@ const Path : React.FC<PathInterface> = ({x1,y1,x2,y2}) =>{
     )
 }
 
-interface Node{
+export interface Node{
     id: string;
     value: number;
-    position: { x: number, y: number }
+    position: { x: number, y: number },
+    color: string;
 }
 
 interface NodeInterface{
@@ -70,10 +72,11 @@ interface NodeInterface{
     cursor: 'crosshair' | 'pointer'
 }
 
-interface PathVertex{
+export interface PathVertex{
     startNodeId: string;
     endNodeId: string;
     weigth: number;
+    color: string;
 }
 const Node: React.FC<NodeInterface> = ({ 
     id,
@@ -283,13 +286,69 @@ const Node: React.FC<NodeInterface> = ({
     );
 };
 
+interface StaticNodeInterface{
+    id: string,
+    value: number;
+    position: { x: number, y: number },
+    color: string;
+}
+
+export const NodeStatic: React.FC<StaticNodeInterface> = ({ 
+    id,
+    value, 
+    position,
+    color
+}) => {
+
+
+
+    return (
+        <div style={{
+            padding: '10px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderWidth: 1,
+            borderRadius: '100%',
+            borderStyle: 'solid',
+            width: 'fit-content',
+            cursor: 'pointer',
+            position: 'absolute',
+            pointerEvents: 'all',
+            backgroundColor: color,
+            textAlign: 'center',
+            color: 'black',
+            top: position.y,
+            left: position.x
+        }} id={'node'+id}>
+            <input type="number" value={value} style={{
+                    backgroundColor: 'transparent',
+                    textAlign: 'center',
+                    borderWidth: 0,
+                    color: 'black'
+                }} disabled={true}/>
+            </div>
+    );
+};
+
 
 interface EditGraphModalInterface{
     show: boolean;
-    handleClose: ()=>void
+    handleClose: ()=>void;
+    buildGraph: (nodes: Node[], paths: PathVertex[]) => void;
+    setStartNode : (value: string)=>void
 }
 
-const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=>{
+const EditGraphModal : React.FC<EditGraphModalInterface> = ({
+    show,
+    handleClose,
+    buildGraph,
+    setStartNode
+})=>{
+
+    const {
+        visualizationOption,
+    }  = useContext(AppContext);
     
     const [nodes,setNodes] = useState<Node[]>([]);
     const [path,setPath] = useState<boolean>(false);
@@ -310,6 +369,8 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
     const graphRef = useRef<HTMLDivElement>(null);
 
     const [paths,setPaths] = useState<PathVertex[]>([]);
+
+    const [startNodeValue,setStartNodeValue] = useState(0);
 
 
   const changeCursor = () => {
@@ -332,7 +393,8 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
         const newPath : PathVertex ={
             startNodeId: initialVertex,
             endNodeId: id,
-            weigth: 0
+            weigth: 0,
+            color: 'black'
         };
         let foundNewPath = false;
         for(let i=0;i<paths.length;i++)
@@ -363,7 +425,8 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
                     position:{
                         x: node.position.x,
                         y: node.position.y
-                    }
+                    },
+                    color: node.color
                 }
             }
             else{
@@ -376,7 +439,8 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
             position:{
                 x: node.position.x,
                 y: node.position.y
-            }
+            },
+            color: node.color
         })
         console.log(nodeMap.current);
         setNodes(newNodes);
@@ -397,7 +461,8 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
                     position:{
                         x: data.x,
                         y: data.y
-                    }
+                    },
+                    color: node.color
                 }
             }
             else{
@@ -410,7 +475,8 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
             position:{
                 x: data.x,
                 y: data.y
-            }
+            },
+            color: node.color
         })
         setNodes(newNodes);
         }
@@ -431,7 +497,8 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
                     position:{
                         x: clamp(0,800-nodeWidth-10,data.x),
                         y: clamp(0,800-nodeHeight-10,data.y)
-                    }
+                    },
+                    color: node.color
                 }
             }
             else{
@@ -444,7 +511,8 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
             position:{
                 x: clamp(0,800-nodeWidth-10,data.x),
                 y: clamp(0,800-nodeHeight-10,data.y)
-            }
+            },
+            color: node.color
         })
         console.log(nodeMap.current);
         setNodes(newNodes);
@@ -473,7 +541,8 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
             position: {
                 x: getRandomBetween(100,700),
                 y: getRandomBetween(100,700)
-            }
+            },
+            color: 'transparent'
         }
         const newNodes = [...nodes,newNode];
         nodeMap.current.set(id,newNode);
@@ -500,6 +569,18 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
         }
     }
 
+    const hanldeSave = () =>{
+        buildGraph(nodes,paths);
+        for(let i=0;i<nodes.length;i++)
+        {
+            if(nodes[i].value===startNodeValue)
+            {
+                setStartNode(nodes[i].id);
+            }
+        }
+        handleClose();
+    }
+
 
     return(
         <Modal show={show} onHide={handleClose} fullscreen>
@@ -511,10 +592,18 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
             alignItems: 'center',
             justifyContent: 'center',
         }}>
+            <div style={{
+                display: 'flex',
+                width: '300px',
+                justifyContent: 'space-between',
+                marginBottom: '10px',
+                flexDirection: 'column',
+                marginRight: '40px'
+            }}>
                       <div style={{
                 display: 'flex',
-                width: '400px',
-                justifyContent: 'space-evenly',
+                width: '300px',
+                justifyContent: 'space-between',
                 marginBottom: '10px',
             }}>
             <Button onClick={addNode}>
@@ -523,6 +612,14 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
             <Button onClick={changeCursor}>
                 {cursor === "pointer" ? "Set Delete Mode" : "Unset Delete Mode"}
             </Button>
+            </div>
+            <Form.Group style={{
+                width: '100%'
+            }}>
+                <Form.Control type="number" placeholder="Set Start Node" value={startNodeValue} onChange={(e)=>{
+                    setStartNodeValue(Number(e.target.value));
+                }}/>
+            </Form.Group>
             </div>
             <div ref={graphRef} style={{
                 position: 'relative',
@@ -580,9 +677,9 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
                                     {
                                         deletePath(index);
                                     }
-                                }}>
+                                }} id={index.toString()}>
                                 <Xarrow start={path.startNodeId} end={path.endNodeId} color="black" strokeWidth={5} path="straight" labels={{
-                                    middle: <div style={
+                                    middle: (visualizationOption !==0 && visualizationOption!==1) ? <div style={
                                         {
                                             position: 'absolute',
                                             margin: '10px'
@@ -599,6 +696,7 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
                                         newPaths[index] = newPath;
                                         setPaths(newPaths);
                                     }} value={path.weigth}/></div>
+                                    : <></> 
                                 }} />
                                 </div>
                             )
@@ -633,7 +731,7 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({show,handleClose})=
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={hanldeSave}>
             Save Changes
           </Button>
         </Modal.Footer>

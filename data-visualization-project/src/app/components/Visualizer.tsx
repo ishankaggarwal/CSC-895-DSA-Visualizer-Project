@@ -12,7 +12,8 @@ import InsertionSortArrayVisualizer from "./VisualizationComponents/InsertionSor
 import SelectionSortArrayVisualizer from "./VisualizationComponents/SelectionSortArrayVisualizer";
 import MergeSortVisualizer from "./VisualizationComponents/MergeSortArrayVisualizer";
 import QuickSortVisualizer from "./VisualizationComponents/QuickSortArrayVisualizer";
-import DjikstraAlgorithmVisualizer from "./VisualizationComponents/DjikstraAlgorithmVisualizer";
+import DepthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/DepthFirstSearchAlgorithm";
+import BreadthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/BreadthFirstSearchAlgorithm";
 
 
 const Visualizer = () =>{
@@ -60,9 +61,14 @@ const Visualizer = () =>{
                 visualizationCategory === 1 && <BinaryTreeVisualizer/>
             }
             {
-                visualizationCategory === 2 && <DjikstraAlgorithmVisualizer/>
+                (visualizationCategory === 2 && visualizationOption===0)  && <DepthFirstSearchAlgorithmVisualizer/>
             }
-            <InputBox/>
+                        {
+                (visualizationCategory === 2 && visualizationOption===1)  && <BreadthFirstSearchAlgorithmVisualizer/>
+            }
+            {
+                visualizationCategory !== 2 && <InputBox/>
+            }
         </div>
     )
 }

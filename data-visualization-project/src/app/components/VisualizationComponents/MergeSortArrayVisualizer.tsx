@@ -39,6 +39,7 @@ const MergeSortVisualizer = () =>{
 
     const [height,setHeight] = useState<number>(300);
     const [width,setWidth] = useState<number>(300);
+    const [barHeight,setBarHeight] = useState(0);
 
     const animationsRef = useRef<MergeSortArrayVisualizationAnimationInterface[]>([]);
 
@@ -91,6 +92,7 @@ const MergeSortVisualizer = () =>{
         setWidth(arrayTree.returnWidth());
         console.log(arrayTree.nodes);
         setNodes(arrayTree.nodes);
+        setBarHeight(arrayTree.distance/Math.max(...arr));
         divideAndConquerTree.current = arrayTree;
     }
 
@@ -183,10 +185,22 @@ const MergeSortVisualizer = () =>{
                             top: node.i,
                             left: node.j,
                             position: 'absolute',
+                            height: (divideAndConquerTree.current?.distance+50)
                         }} id={"node"+node.id}>
                             {
                                node.value.map((value,index)=>{
                                     return(
+                                        <div style={{
+                                            margin: '10px',
+                                            alignSelf: 'flex-end'
+                                        }}>
+                                                <div style={{
+                                                width: '100%',
+                                                height: value*barHeight,
+                                                backgroundColor: 'green',
+                                            }}>
+                
+                                            </div>
                                         <div style={{
                                             padding: '10px',
                                             borderWidth: '1px',
@@ -194,6 +208,7 @@ const MergeSortVisualizer = () =>{
                                             backgroundColor: index === node.indexI ? node.colorI : index === node.indexJ ? node.colorJ : 'transparent'
                                         }}>
                                             {value}
+                                        </div>
                                         </div>
                                     )
                                 }) 

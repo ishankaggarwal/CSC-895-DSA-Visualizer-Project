@@ -64,8 +64,8 @@ export function quickSort(array: number[],map: Map<number,NodeTree>,i: number,j:
             if (array[i] < pivot) {
                 nodeTree.indexI = i;
                 nodeTree.indexJ = i;
-                nodeTree.colorI = 'blue';
-                nodeTree.colorJ = 'blue';
+                nodeTree.colorI = 'purple';
+                nodeTree.colorJ = 'purple';
                 animations.push({
                     nodeTrees: [deepCopy(nodeTree)],
                     currentLineMarkers: [{ startRow: 9, startCol: 0, endRow: 9, endCol: 1000, className: 'myMarker', type: 'text' }],
@@ -92,8 +92,8 @@ export function quickSort(array: number[],map: Map<number,NodeTree>,i: number,j:
             } else {
                 nodeTree.indexI = i;
                 nodeTree.indexJ = i;
-                nodeTree.colorI = 'green';
-                nodeTree.colorJ = 'green';
+                nodeTree.colorI = 'red';
+                nodeTree.colorJ = 'red';
                 animations.push({
                     nodeTrees: [deepCopy(nodeTree)],
                     currentLineMarkers: [{ startRow: 11, startCol: 0, endRow: 11, endCol: 1000, className: 'myMarker', type: 'text' }],
