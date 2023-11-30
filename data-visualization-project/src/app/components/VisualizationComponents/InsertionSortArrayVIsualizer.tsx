@@ -121,7 +121,7 @@ const InsertionSortArrayVisualizer = () =>{
                 setMarkers(currentLineMarkers);
                 setArrayVisualization(newArray);
                 setKeyValue(keyValue);
-                await sleep(1000/speedRef.current);
+                await sleep(3000/speedRef.current);
                 setAnimations(animationsRef.current);
                 }
             }

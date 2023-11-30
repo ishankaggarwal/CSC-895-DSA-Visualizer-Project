@@ -122,7 +122,7 @@ const BubbleSortArrayVisualizer = () =>{
                 newArray[indexJ].color = colorJ;
                 setMarkers(currentLineMarkers);
                 setArrayVisualization(newArray);
-                await sleep(1000/speedRef.current);
+                await sleep(3000/speedRef.current);
                 setAnimations(animationsRef.current);
                 }
             }

@@ -65,6 +65,8 @@ const BinaryTreeVisualizer = () =>{
 
     const initalLinksRef = useRef<Link[]>([]);
 
+    const [values,setValues] = useState<number[]>([]);
+
 
     useEffect(()=>{
         isPlayingRef.current = isPlayingValue;
@@ -89,6 +91,7 @@ const BinaryTreeVisualizer = () =>{
     },[input]);
 
     useEffect(()=>{
+        console.log(initialCreateRef.current);
         if(initialCreateRef.current)
         {
         getWidthAndHeightOfNodes();
@@ -141,18 +144,19 @@ const BinaryTreeVisualizer = () =>{
     }
 
     const visualizeTree = async (root: Node| null) =>{
+        let values: number[] = [];
         let animations : BinaryTreeAnimationInterface[] = [];
         if(visualizationOption===0)
         {
-            traverseTreeInorder(root,animations);
+            traverseTreeInorder(root,animations,values);
         }
         if(visualizationOption===1)
         {
-            traverseTreePreorder(root,animations);
+            traverseTreePreorder(root,animations,values);
         }
         if(visualizationOption===2)
         {
-            traverseTreePostOrder(root,animations);
+            traverseTreePostOrder(root,animations,values);
         }
         if(animationsRef.current.length>0)
         {
@@ -181,7 +185,8 @@ const BinaryTreeVisualizer = () =>{
                     nodeId,
                     linkId,
                     color,
-                    currentLineMarkers
+                    currentLineMarkers,
+                    values
                 } = animation;
                 if(type==="node")
                 {
@@ -206,7 +211,8 @@ const BinaryTreeVisualizer = () =>{
                 setMarkers(currentLineMarkers);
                 setNodes(newNodes);
                 setLinks(newLinks);
-                await sleep(1000/speedRef.current);
+                setValues(values);
+                await sleep(3000/speedRef.current);
                 setAnimations(animationsRef.current);
                 }
             }
@@ -265,6 +271,30 @@ const BinaryTreeVisualizer = () =>{
                     })
                 }
                         </svg>
+            }
+            </div>
+            <div style={{
+                display: 'flex',
+            }}>
+            {
+                values.map((value,index)=>{
+                    return (
+                        <div style={{
+                            margin: '10px',
+                            alignSelf: 'flex-end'
+                        }}>
+                        <div style={{
+                            padding: '20px',
+                            borderStyle: 'solid',
+                            borderWidth: '2px',
+                            fontSize: '35px',
+                            width: 'fit-content'
+                        }} key={index} id={"value"+index}>
+                            {value}
+                            </div>
+                            </div>
+                    )
+                })
             }
             </div>
         </div>

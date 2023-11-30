@@ -59,6 +59,10 @@ export const items = [
       {
         subCategoryName: 'Breadth First Search',
         subCategoryValue: 1,
+      },
+      {
+        subCategoryName: 'Djikstra Algorithm',
+        subCategoryValue: 2,
       }
     ]
   }

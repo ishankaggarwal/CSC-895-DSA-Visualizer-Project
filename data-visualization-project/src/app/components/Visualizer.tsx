@@ -14,6 +14,7 @@ import MergeSortVisualizer from "./VisualizationComponents/MergeSortArrayVisuali
 import QuickSortVisualizer from "./VisualizationComponents/QuickSortArrayVisualizer";
 import DepthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/DepthFirstSearchAlgorithm";
 import BreadthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/BreadthFirstSearchAlgorithm";
+import DjikstraAlgorithmVisualizer from "./VisualizationComponents/DjikstraAlgorithmVisualizer";
 
 
 const Visualizer = () =>{
@@ -63,8 +64,11 @@ const Visualizer = () =>{
             {
                 (visualizationCategory === 2 && visualizationOption===0)  && <DepthFirstSearchAlgorithmVisualizer/>
             }
-                        {
+            {
                 (visualizationCategory === 2 && visualizationOption===1)  && <BreadthFirstSearchAlgorithmVisualizer/>
+            }
+                        {
+                (visualizationCategory === 2 && visualizationOption===2)  && <DjikstraAlgorithmVisualizer/>
             }
             {
                 visualizationCategory !== 2 && <InputBox/>

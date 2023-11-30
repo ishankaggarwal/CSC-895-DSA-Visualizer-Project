@@ -148,7 +148,7 @@ const MergeSortVisualizer = () =>{
                 }
                 setMarkers(currentLineMarkers);
                 setNodes(newNodes);
-                await sleep(1000/speedRef.current);
+                await sleep(3000/speedRef.current);
                 setAnimations(animationsRef.current);
                 }
             }
@@ -185,7 +185,7 @@ const MergeSortVisualizer = () =>{
                             top: node.i,
                             left: node.j,
                             position: 'absolute',
-                            height: (divideAndConquerTree.current?.distance+50)
+                            height: (Number(divideAndConquerTree.current?.distance)+50)
                         }} id={"node"+node.id}>
                             {
                                node.value.map((value,index)=>{

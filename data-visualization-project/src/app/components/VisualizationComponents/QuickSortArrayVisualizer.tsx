@@ -16,7 +16,7 @@ function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-function deepCopyMap<K, V>(original: Map<K, V>): Map<K, V> {
+export function deepCopyMap<K, V>(original: Map<K, V>): Map<K, V> {
     const newMap = new Map<K, V>();
     original.forEach((value, key) => {
       // Assuming the values are objects, you might need to adjust this
@@ -218,7 +218,7 @@ const QuickSortVisualizer = () =>{
                             top: node.i,
                             left: node.j,
                             position: 'absolute',
-                            height: (divideAndConquerTree.current?.distanceQuickSort+50),
+                            height: divideAndConquerTree.current && (divideAndConquerTree.current?.distanceQuickSort+50),
                         }} id={"node"+node.id}>
                             {
                                 <>
@@ -256,7 +256,7 @@ const QuickSortVisualizer = () =>{
                                 }}>
                                             <div style={{
                                                 width: '100%',
-                                                height: pivotMap.get(node.id) ? pivotMap.get(node.id)?.pivotValue * barHeight : 0,
+                                                height: pivotMap.get(node.id) ? Number(pivotMap.get(node.id)?.pivotValue) * barHeight : 0,
                                                 backgroundColor: 'green',
                                             }}>
                 

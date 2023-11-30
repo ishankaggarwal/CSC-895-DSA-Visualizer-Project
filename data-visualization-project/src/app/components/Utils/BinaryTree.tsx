@@ -9,6 +9,7 @@ export interface BinaryTreeAnimationInterface{
   linkId? : string;
   currentLineMarkers : IMarker[]; 
   color: string;
+  values: number[];
 }
 
 export interface Link{

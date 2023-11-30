@@ -125,7 +125,7 @@ const SelectionSortArrayVisualizer = () =>{
                 setArrayVisualization(newArray);
                 setMinValue(minValue);
                 setMinIndex(minIndex);
-                await sleep(1000/speedRef.current);
+                await sleep(3000/speedRef.current);
                 setAnimations(animationsRef.current);
                 }
             }
