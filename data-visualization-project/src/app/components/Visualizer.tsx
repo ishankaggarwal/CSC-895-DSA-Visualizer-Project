@@ -15,22 +15,27 @@ import QuickSortVisualizer from "./VisualizationComponents/QuickSortArrayVisuali
 import DepthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/DepthFirstSearchAlgorithm";
 import BreadthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/BreadthFirstSearchAlgorithm";
 import DjikstraAlgorithmVisualizer from "./VisualizationComponents/DjikstraAlgorithmVisualizer";
+import HoverComponent from "./Utils/HoverComponent";
 
 
 const Visualizer = () =>{
 
     const {
         visualizationCategory,
-        visualizationOption
+        visualizationOption,
+        position,
+        hoverValue,
+        isHovered
     }  = useContext(AppContext);
     return(
+        <>
         <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
             position: 'absolute',
-            top: 100,
+            top: 150,
             left: 0,
             width: '70%',
         }}>
@@ -74,6 +79,7 @@ const Visualizer = () =>{
                 visualizationCategory !== 2 && <InputBox/>
             }
         </div>
+        </>
     )
 }
 

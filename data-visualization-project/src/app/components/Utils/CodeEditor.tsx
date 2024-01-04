@@ -82,6 +82,9 @@ const CodeEditor = () =>{
         value={editorValue}
         readOnly={true}
         markers={markers}
+        style={{
+          height: '100%'
+        }}
         />
     )
 }

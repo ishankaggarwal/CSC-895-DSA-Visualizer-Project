@@ -6,6 +6,7 @@ import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
+import HoverComponent from "../Utils/HoverComponent";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -18,7 +19,13 @@ const BubbleSortArrayVisualizer = () =>{
         speedValue,
         isPlaying,
         input,
-        setMarkers
+        setMarkers,
+        setHoverValue,
+        setIsHovered,
+        setPosition,
+        position,
+        hoverValue,
+        isHovered
     }  = useContext(AppContext);
 
     const [arrayVisualization,setArrayVisualization] = useState<BubbleSortArrayVisualizationInterface[]>([]);
@@ -29,6 +36,31 @@ const BubbleSortArrayVisualizer = () =>{
     const isPlayingRef = useRef<boolean>(isPlayingValue);
     const animationsRef = useRef<BubbleSortArrayVisualizationAnimationInterface[]>([]);
     const [barHeight,setBarHeight] = useState<number>(0);
+    const [barWidth,setBarWidth] = useState<number>(100);
+    const [containerWidth,setContainerWidth] = useState<number>(0.7*window.innerWidth);
+    const marginWidth = 1;
+    const itemEls = useRef<any>({});
+
+  useEffect(() => {
+    // Function to update windowWidth whenever the window is resized
+    const handleResize = () => {
+        setContainerWidth(0.7*window.innerWidth);
+    };
+
+    // Attach the event listener when the component mounts
+    window.addEventListener('resize', handleResize);
+
+    // Remove the event listener when the component unmounts to prevent memory leaks
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(()=>{
+    const n = arrayVisualization.length;
+    setBarWidth((containerWidth-(2*marginWidth*n))/n);
+  },[containerWidth,arrayVisualization]);
+
 
     useEffect(()=>{
         isPlayingRef.current = isPlayingValue;
@@ -98,6 +130,16 @@ const BubbleSortArrayVisualizer = () =>{
 
     }
 
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>,value: number) => {
+        setIsHovered(true);
+        setPosition({ x: e.clientX, y: e.clientY });
+        setHoverValue(value);
+      };
+    
+      const handleMouseLeave = () => {
+        setIsHovered(false);
+      };
+
     const processAnimations = async ()=>{
         if(animationsRef.current.length>0)
         {
@@ -134,38 +176,41 @@ const BubbleSortArrayVisualizer = () =>{
         <div style={{
             display: 'flex',
             justifyContent: 'center',
-            flexDirection: 'column',
             alignItems: 'center',
-            maxWidth: '100%',
             overflow: 'scroll',
-            padding: '10px'
+            width: containerWidth,
         }}>
             <div style={{
                 display: 'flex',
-                alignSelf: 'flex-start'
+                alignSelf: 'flex-start',
             }}>
             {
                 arrayVisualization.map((value,index)=>{
                     return (
                         <div style={{
-                            margin: '10px',
-                            alignSelf: 'flex-end'
+                            alignSelf: 'flex-end',
+                            width: barWidth,
+                            margin: marginWidth,
+                            minWidth: marginWidth*2
                         }}>
                                 <div style={{
                                 width: '100%',
                                 height: value.value*barHeight,
                                 backgroundColor: 'green',
-                            }}>
+                            }}       onMouseMove={(e)=>{
+                                handleMouseEnter(e,value.value);
+                            }}
+                            onMouseLeave={handleMouseLeave}>
 
                             </div>
                         <div style={{
-                            padding: '20px',
                             borderStyle: 'solid',
-                            borderWidth: '2px',
-                            fontSize: '35px',
+                            borderWidth: '1px',
                             backgroundColor: value.color,
-                            width: 'fit-content'
-                        }} key={value.index} id={"value"+index}>
+                            width: '100%', 
+                            textAlign: 'center',
+                            overflow: 'hidden'
+                        }} key={value.index} id={"value"+index} ref={(element) => itemEls.current[index] = element}>
                             {value.value}
                             </div>
                             </div>

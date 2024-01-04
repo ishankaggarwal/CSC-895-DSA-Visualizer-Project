@@ -16,6 +16,18 @@ interface ContextInterface{
     setEditorValue: Dispatch<SetStateAction<string>>;
     markers: IMarker[];
     setMarkers: Dispatch<SetStateAction<IMarker[]>>;
+    isHovered: boolean,
+    setIsHovered: Dispatch<SetStateAction<boolean>>,
+    position: {
+        x: number,
+        y: number,
+    }
+    setPosition: Dispatch<SetStateAction<{
+        x: number,
+        y: number,
+    }>>,
+    hoverValue: number,
+    setHoverValue: Dispatch<SetStateAction<number>>,
 }
 
 
@@ -46,6 +58,21 @@ const AppContext = createContext<ContextInterface>({
     },
     markers: [],
     setMarkers: function (value: SetStateAction<IMarker[]>): void {
+        throw new Error("Function not implemented.");
+    },
+    isHovered: false,
+    setIsHovered: function (value: SetStateAction<boolean>): void {
+        throw new Error("Function not implemented.");
+    },
+    position: {
+        x: 0,
+        y: 0
+    },
+    setPosition: function (value: SetStateAction<{ x: number; y: number; }>): void {
+        throw new Error("Function not implemented.");
+    },
+    hoverValue: 0,
+    setHoverValue: function (value: SetStateAction<number>): void {
         throw new Error("Function not implemented.");
     }
 });

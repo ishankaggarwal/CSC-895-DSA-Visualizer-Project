@@ -86,6 +86,12 @@ const SideMenu: React.FC = () => {
       width: '70%',
       justifyContent: 'space-evenly',
       position: 'absolute',
+      padding: '10px',
+      backgroundColor: 'cadetblue',
+      borderStyle: 'solid',
+      borderColor: 'white',
+      borderLeftWidth: 0,
+      borderRightWidth: 0
     }}>
             {
               items.map((item,index)=>{
