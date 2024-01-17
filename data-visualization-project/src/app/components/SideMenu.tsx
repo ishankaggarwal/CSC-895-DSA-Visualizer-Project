@@ -1,119 +1,134 @@
-import React, { useContext, useState } from 'react';
-import { Accordion, Button, Dropdown, ListGroup } from 'react-bootstrap';
-import '../../../styles/sideMenu.css';
-import AppContext from '@/context';
+import React, { useContext, useState } from "react";
+import { Accordion, Button, Dropdown, ListGroup } from "react-bootstrap";
+import "../../../styles/sideMenu.css";
+import AppContext from "@/context";
 
 export const items = [
   {
-    category: 'Arrays',
+    category: "Arrays",
     categoryValue: 0,
-    subCategories:[
+    subCategories: [
       {
-        subCategoryName: 'Bubble Sort',
+        subCategoryName: "Bubble Sort",
         subCategoryValue: 0,
       },
       {
-        subCategoryName: 'Insertion Sort',
+        subCategoryName: "Insertion Sort",
         subCategoryValue: 1,
       },
       {
-        subCategoryName: 'Selection Sort',
+        subCategoryName: "Selection Sort",
         subCategoryValue: 2,
       },
       {
-        subCategoryName: 'Merge Sort',
+        subCategoryName: "Merge Sort",
         subCategoryValue: 3,
       },
       {
-        subCategoryName: 'Quick Sort',
+        subCategoryName: "Quick Sort",
         subCategoryValue: 4,
-      }
-    ]
+      },
+    ],
   },
   {
-    category: 'Tree Traversal Algorithms',
+    category: "Tree Traversal Algorithms",
     categoryValue: 1,
-    subCategories:[
+    subCategories: [
       {
-        subCategoryName: 'In-Order Traversal',
+        subCategoryName: "In-Order Traversal",
         subCategoryValue: 0,
       },
       {
-        subCategoryName: 'Pre-Order Traversal',
+        subCategoryName: "Pre-Order Traversal",
         subCategoryValue: 1,
       },
       {
-        subCategoryName: 'Post-Order Traversal',
+        subCategoryName: "Post-Order Traversal",
         subCategoryValue: 2,
-      }
-    ]
+      },
+    ],
   },
   {
-    category: 'Graph Traversal Algorithms',
+    category: "Graph Traversal Algorithms",
     categoryValue: 2,
-    subCategories:[
+    subCategories: [
       {
-        subCategoryName: 'Depth First Search',
+        subCategoryName: "Depth First Search",
         subCategoryValue: 0,
       },
       {
-        subCategoryName: 'Breadth First Search',
+        subCategoryName: "Breadth First Search",
         subCategoryValue: 1,
       },
       {
-        subCategoryName: 'Djikstra Algorithm',
+        subCategoryName: "Djikstra Algorithm",
         subCategoryValue: 2,
-      }
-    ]
-  }
-]
+      },
+      {
+        subCategoryName: "Topological Sort Algorithm",
+        subCategoryValue: 3,
+      },
+      {
+        subCategoryName: "Floyd Warshall Algorithm",
+        subCategoryValue: 4,
+      },
+      {
+        subCategoryName: "Prim Algorithm",
+        subCategoryValue: 5,
+      },
+    ],
+  },
+];
 
 const SideMenu: React.FC = () => {
+  const { setVisualizationCategory, setVisualizationOption } =
+    useContext(AppContext);
 
-  const {
-    setVisualizationCategory,
-    setVisualizationOption
-  } = useContext(AppContext);
-
-  const onClick = (visualizationCategory: number,visualizationOption: number) =>{
+  const onClick = (
+    visualizationCategory: number,
+    visualizationOption: number
+  ) => {
     setVisualizationCategory(visualizationCategory);
     setVisualizationOption(visualizationOption);
-  }
+  };
 
   return (
-    <div style={{
-      display: 'flex',
-      width: '70%',
-      justifyContent: 'space-evenly',
-      position: 'absolute',
-      padding: '10px',
-      backgroundColor: 'cadetblue',
-      borderStyle: 'solid',
-      borderColor: 'white',
-      borderLeftWidth: 0,
-      borderRightWidth: 0
-    }}>
-            {
-              items.map((item,index)=>{
-                return(
-                <Dropdown>
-                      <Dropdown.Toggle >
-                        {item.category}
-                      </Dropdown.Toggle>
+    <div
+      style={{
+        display: "flex",
+        width: "70%",
+        justifyContent: "space-evenly",
+        position: "absolute",
+        padding: "10px",
+        backgroundColor: "cadetblue",
+        borderStyle: "solid",
+        borderColor: "white",
+        borderLeftWidth: 0,
+        borderRightWidth: 0,
+      }}
+    >
+      {items.map((item, index) => {
+        return (
+          <Dropdown key={index}>
+            <Dropdown.Toggle>{item.category}</Dropdown.Toggle>
 
-                      <Dropdown.Menu>
-                      {
-                          item.subCategories.map((subItem)=>{
-                            return(<Dropdown.Item key={subItem.subCategoryValue} onClick={()=>{
-                              onClick(item.categoryValue,subItem.subCategoryValue);
-                            }}>{subItem.subCategoryName}</Dropdown.Item>)
-                          })
-                        }
-                      </Dropdown.Menu>
-                    </Dropdown>
-                )
-              })
-            }
+            <Dropdown.Menu>
+              {item.subCategories.map((subItem) => {
+                return (
+                  <Dropdown.Item
+                    key={subItem.subCategoryValue}
+                    onClick={() => {
+                      onClick(item.categoryValue, subItem.subCategoryValue);
+                    }}
+                  >
+                    {subItem.subCategoryName}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown.Menu>
+          </Dropdown>
+        );
+      })}
     </div>
   );
 };

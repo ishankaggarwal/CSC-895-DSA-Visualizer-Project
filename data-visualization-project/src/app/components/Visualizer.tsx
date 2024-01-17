@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import AppContext from "@/context";
 import ArrayVisualizer from "./VisualizationComponents/BubbleSortArrayVisualizer";
 import SpeedComponent from "./Utils/SpeedComponent";
@@ -15,72 +15,82 @@ import QuickSortVisualizer from "./VisualizationComponents/QuickSortArrayVisuali
 import DepthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/DepthFirstSearchAlgorithm";
 import BreadthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/BreadthFirstSearchAlgorithm";
 import DjikstraAlgorithmVisualizer from "./VisualizationComponents/DjikstraAlgorithmVisualizer";
+import TopoLogicalSortVisualizer from "./VisualizationComponents/TopoLogicalSortVisualizer";
 import HoverComponent from "./Utils/HoverComponent";
+import FloydWarshallVisualizer from "./VisualizationComponents/FloydWarshallAlgorithm";
+import PrimAlgorithmVisualizer from "./VisualizationComponents/PrimAlgorithm";
 
-
-const Visualizer = () =>{
-
-    const {
-        visualizationCategory,
-        visualizationOption,
-        position,
-        hoverValue,
-        isHovered
-    }  = useContext(AppContext);
-    return(
-        <>
-        <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            position: 'absolute',
-            top: 150,
-            left: 0,
-            width: '70%',
-        }}>
-            <div style={{
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-                display: 'flex',
-            }}>
-            <SpeedComponent/>
-            <PlayPauseComponent/>
-            </div>
-            {
-                (visualizationCategory ===0 && visualizationOption===0) && <BubbleSortArrayVisualizer/>
-            }
-            {
-                (visualizationCategory ===0 && visualizationOption===1) && <InsertionSortArrayVisualizer/>
-            }
-            {
-                (visualizationCategory ===0 && visualizationOption===2) && <SelectionSortArrayVisualizer/>
-            }
-            {
-                (visualizationCategory ===0 && visualizationOption===3) && <MergeSortVisualizer/>
-            }
-                        {
-                (visualizationCategory ===0 && visualizationOption===4) && <QuickSortVisualizer/>
-            }
-            {
-                visualizationCategory === 1 && <BinaryTreeVisualizer/>
-            }
-            {
-                (visualizationCategory === 2 && visualizationOption===0)  && <DepthFirstSearchAlgorithmVisualizer/>
-            }
-            {
-                (visualizationCategory === 2 && visualizationOption===1)  && <BreadthFirstSearchAlgorithmVisualizer/>
-            }
-                        {
-                (visualizationCategory === 2 && visualizationOption===2)  && <DjikstraAlgorithmVisualizer/>
-            }
-            {
-                visualizationCategory !== 2 && <InputBox/>
-            }
+const Visualizer = () => {
+  const {
+    visualizationCategory,
+    visualizationOption,
+    position,
+    hoverValue,
+    isHovered,
+  } = useContext(AppContext);
+  return (
+    <>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          position: "absolute",
+          top: 150,
+          left: 0,
+          width: "70%",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            display: "flex",
+          }}
+        >
+          <SpeedComponent />
+          <PlayPauseComponent />
         </div>
-        </>
-    )
-}
+        {visualizationCategory === 0 && visualizationOption === 0 && (
+          <BubbleSortArrayVisualizer />
+        )}
+        {visualizationCategory === 0 && visualizationOption === 1 && (
+          <InsertionSortArrayVisualizer />
+        )}
+        {visualizationCategory === 0 && visualizationOption === 2 && (
+          <SelectionSortArrayVisualizer />
+        )}
+        {visualizationCategory === 0 && visualizationOption === 3 && (
+          <MergeSortVisualizer />
+        )}
+        {visualizationCategory === 0 && visualizationOption === 4 && (
+          <QuickSortVisualizer />
+        )}
+        {visualizationCategory === 1 && <BinaryTreeVisualizer />}
+        {visualizationCategory === 2 && visualizationOption === 0 && (
+          <DepthFirstSearchAlgorithmVisualizer />
+        )}
+        {visualizationCategory === 2 && visualizationOption === 1 && (
+          <BreadthFirstSearchAlgorithmVisualizer />
+        )}
+        {visualizationCategory === 2 && visualizationOption === 2 && (
+          <DjikstraAlgorithmVisualizer />
+        )}
+        {visualizationCategory === 2 && visualizationOption === 3 && (
+          <TopoLogicalSortVisualizer />
+        )}
+        {visualizationCategory === 2 && visualizationOption === 4 && (
+          <FloydWarshallVisualizer />
+        )}
+        {visualizationCategory === 2 && visualizationOption === 5 && (
+          <PrimAlgorithmVisualizer />
+        )}
+        {visualizationCategory !== 2 && <InputBox />}
+      </div>
+    </>
+  );
+};
 
 export default Visualizer;
