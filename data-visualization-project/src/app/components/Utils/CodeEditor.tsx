@@ -15,7 +15,6 @@ const CodeEditor = () => {
     visualizationOption,
   } = useContext(AppContext);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   function fetchFile(filePath: string) {
     fetch(filePath)
       .then((response) => response.blob())
@@ -47,6 +46,12 @@ const CodeEditor = () => {
     if (visualizationCategory === 0 && visualizationOption === 4) {
       fetchFile("/codefiles/quicksort.py");
     }
+    if (visualizationCategory === 0 && visualizationOption === 5) {
+      fetchFile("/codefiles/binarysearch.py");
+    }
+    if (visualizationCategory === 0 && visualizationOption === 6) {
+      fetchFile("/codefiles/countsort.py");
+    }
     if (visualizationCategory === 1 && visualizationOption === 0) {
       fetchFile("/codefiles/inordertraversal.py");
     }
@@ -55,6 +60,15 @@ const CodeEditor = () => {
     }
     if (visualizationCategory === 1 && visualizationOption === 2) {
       fetchFile("/codefiles/postordertraversal.py");
+    }
+    if (visualizationCategory === 1 && visualizationOption === 3) {
+      fetchFile("/codefiles/prim.py");
+    }
+    if (visualizationCategory === 1 && visualizationOption === 4) {
+      fetchFile("/codefiles/levelordertraversal.py");
+    }
+    if (visualizationCategory === 1 && visualizationOption === 5) {
+      fetchFile("/codefiles/lowestcommonancestor.py");
     }
     if (visualizationCategory === 2 && visualizationOption === 0) {
       fetchFile("/codefiles/dfs.py");
@@ -69,9 +83,9 @@ const CodeEditor = () => {
       fetchFile("/codefiles/floydwarshall.py");
     }
     if (visualizationCategory === 2 && visualizationOption === 5) {
-      fetchFile("/codefiles/prim.py");
+      fetchFile("/codefiles/cycledetection.py");
     }
-  }, [fetchFile, visualizationCategory, visualizationOption]);
+  }, [visualizationCategory, visualizationOption]);
 
   return (
     <AceEditor

@@ -19,6 +19,10 @@ import TopoLogicalSortVisualizer from "./VisualizationComponents/TopoLogicalSort
 import HoverComponent from "./Utils/HoverComponent";
 import FloydWarshallVisualizer from "./VisualizationComponents/FloydWarshallAlgorithm";
 import PrimAlgorithmVisualizer from "./VisualizationComponents/PrimAlgorithm";
+import LevelOrderTraversalVisualizer from "./VisualizationComponents/LevelOrderTraversalVisualizer";
+import BinarySearchVisualizer from "./VisualizationComponents/BinarySearchVisualizer";
+import CycleDetectionInGraphVisualizer from "./VisualizationComponents/CycleDetectionInGraphVisualizer";
+import CounterSortVisualizer from "./VisualizationComponents/CounterSortVisualizer";
 
 const Visualizer = () => {
   const {
@@ -68,7 +72,23 @@ const Visualizer = () => {
         {visualizationCategory === 0 && visualizationOption === 4 && (
           <QuickSortVisualizer />
         )}
-        {visualizationCategory === 1 && <BinaryTreeVisualizer />}
+        {visualizationCategory === 0 && visualizationOption === 5 && (
+          <BinarySearchVisualizer />
+        )}
+        {visualizationCategory === 0 && visualizationOption === 6 && (
+          <CounterSortVisualizer />
+        )}
+        {visualizationCategory === 1 &&
+          (visualizationOption === 0 ||
+            visualizationOption === 1 ||
+            visualizationOption === 2 ||
+            visualizationOption === 5) && <BinaryTreeVisualizer />}
+        {visualizationCategory === 1 && visualizationOption === 3 && (
+          <PrimAlgorithmVisualizer />
+        )}
+        {visualizationCategory === 1 && visualizationOption === 4 && (
+          <LevelOrderTraversalVisualizer />
+        )}
         {visualizationCategory === 2 && visualizationOption === 0 && (
           <DepthFirstSearchAlgorithmVisualizer />
         )}
@@ -85,9 +105,13 @@ const Visualizer = () => {
           <FloydWarshallVisualizer />
         )}
         {visualizationCategory === 2 && visualizationOption === 5 && (
-          <PrimAlgorithmVisualizer />
+          <CycleDetectionInGraphVisualizer />
         )}
-        {visualizationCategory !== 2 && <InputBox />}
+        {visualizationCategory !== 2 &&
+          !(
+            visualizationCategory === 1 &&
+            (visualizationOption === 3 || visualizationOption === 4)
+          ) && <InputBox />}
       </div>
     </>
   );

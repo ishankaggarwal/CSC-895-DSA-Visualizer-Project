@@ -28,6 +28,14 @@ export const items = [
         subCategoryName: "Quick Sort",
         subCategoryValue: 4,
       },
+      {
+        subCategoryName: "Binary Search",
+        subCategoryValue: 5,
+      },
+      {
+        subCategoryName: "Count Sort",
+        subCategoryValue: 6,
+      },
     ],
   },
   {
@@ -45,6 +53,18 @@ export const items = [
       {
         subCategoryName: "Post-Order Traversal",
         subCategoryValue: 2,
+      },
+      {
+        subCategoryName: "Prim Algorithm",
+        subCategoryValue: 3,
+      },
+      {
+        subCategoryName: "Level Order Traversal",
+        subCategoryValue: 4,
+      },
+      {
+        subCategoryName: "Lowest Common Ancestor",
+        subCategoryValue: 5,
       },
     ],
   },
@@ -73,7 +93,7 @@ export const items = [
         subCategoryValue: 4,
       },
       {
-        subCategoryName: "Prim Algorithm",
+        subCategoryName: "Cycle Detection In Graph",
         subCategoryValue: 5,
       },
     ],
