@@ -34,3 +34,14 @@ export interface topoLogicalSortVisualizationInterface {
   currentLineMarkers: IMarker[];
   resultOrder?: string[];
 }
+
+export interface CycleDetectionVisulizationInterface {
+  type: "node" | "path" | "cycle";
+  nodeId?: string;
+  pathStartId?: string;
+  pathEndId?: string;
+  nodeColor?: string;
+  pathColor?: string;
+  searchValue: string[];
+  currentLineMarkers: IMarker[];
+}
