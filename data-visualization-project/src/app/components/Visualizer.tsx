@@ -1,11 +1,8 @@
 import { useContext } from "react";
 import AppContext from "@/context";
-import ArrayVisualizer from "./VisualizationComponents/BubbleSortArrayVisualizer";
 import SpeedComponent from "./Utils/SpeedComponent";
 import PlayPauseComponent from "./Utils/PlayPause";
 import InputBox from "./Utils/InputBox";
-import CodeEditor from "./Utils/CodeEditor";
-import BinaryTree from "./Utils/BinaryTree";
 import BinaryTreeVisualizer from "./VisualizationComponents/BinaryTreeVisualizer";
 import BubbleSortArrayVisualizer from "./VisualizationComponents/BubbleSortArrayVisualizer";
 import InsertionSortArrayVisualizer from "./VisualizationComponents/InsertionSortArrayVIsualizer";
@@ -16,13 +13,12 @@ import DepthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/Depth
 import BreadthFirstSearchAlgorithmVisualizer from "./VisualizationComponents/BreadthFirstSearchAlgorithm";
 import DjikstraAlgorithmVisualizer from "./VisualizationComponents/DjikstraAlgorithmVisualizer";
 import TopoLogicalSortVisualizer from "./VisualizationComponents/TopoLogicalSortVisualizer";
-import HoverComponent from "./Utils/HoverComponent";
 import FloydWarshallVisualizer from "./VisualizationComponents/FloydWarshallAlgorithm";
 import PrimAlgorithmVisualizer from "./VisualizationComponents/PrimAlgorithm";
-import LevelOrderTraversalVisualizer from "./VisualizationComponents/LevelOrderTraversalVisualizer";
 import BinarySearchVisualizer from "./VisualizationComponents/BinarySearchVisualizer";
 import CycleDetectionInGraphVisualizer from "./VisualizationComponents/CycleDetectionInGraphVisualizer";
 import CounterSortVisualizer from "./VisualizationComponents/CounterSortVisualizer";
+import LevelOrderGraphTraversalVisualizer from "./VisualizationComponents/LevelOrderGraphTraversal";
 
 const Visualizer = () => {
   const {
@@ -78,17 +74,7 @@ const Visualizer = () => {
         {visualizationCategory === 0 && visualizationOption === 6 && (
           <CounterSortVisualizer />
         )}
-        {visualizationCategory === 1 &&
-          (visualizationOption === 0 ||
-            visualizationOption === 1 ||
-            visualizationOption === 2 ||
-            visualizationOption === 5) && <BinaryTreeVisualizer />}
-        {visualizationCategory === 1 && visualizationOption === 3 && (
-          <PrimAlgorithmVisualizer />
-        )}
-        {visualizationCategory === 1 && visualizationOption === 4 && (
-          <LevelOrderTraversalVisualizer />
-        )}
+        {visualizationCategory === 1 && <BinaryTreeVisualizer />}
         {visualizationCategory === 2 && visualizationOption === 0 && (
           <DepthFirstSearchAlgorithmVisualizer />
         )}
@@ -107,11 +93,13 @@ const Visualizer = () => {
         {visualizationCategory === 2 && visualizationOption === 5 && (
           <CycleDetectionInGraphVisualizer />
         )}
-        {visualizationCategory !== 2 &&
-          !(
-            visualizationCategory === 1 &&
-            (visualizationOption === 3 || visualizationOption === 4)
-          ) && <InputBox />}
+        {visualizationCategory === 2 && visualizationOption === 6 && (
+          <PrimAlgorithmVisualizer />
+        )}
+        {visualizationCategory === 2 && visualizationOption === 7 && (
+          <LevelOrderGraphTraversalVisualizer />
+        )}
+        {visualizationCategory !== 2 && <InputBox />}
       </div>
     </>
   );

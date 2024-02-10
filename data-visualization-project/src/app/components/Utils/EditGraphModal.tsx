@@ -804,7 +804,7 @@ const EditGraphModal: React.FC<EditGraphModalInterface> = ({
             {nodes.map((node, index) => {
               return (
                 <Node
-                  key={index}
+                  key={node.id}
                   id={node.id}
                   value={node.value}
                   position={node.position}

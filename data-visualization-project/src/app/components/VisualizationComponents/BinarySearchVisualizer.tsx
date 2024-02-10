@@ -1,6 +1,6 @@
 import React from "react";
-import { BinarySearchAnimationInterface } from "../../interfaces/BinarySearchVisualizationInterface";
-import { binarySearchWithAnimation } from "../../visualization-algorithms/BinarySearch";
+import { BinarySearchAnimationInterface } from "@/app/interfaces/BinarySearchVisualizationInterface";
+import { binarySearchWithAnimation } from "@/app/visualization-algorithms/BinarySearch";
 import AppContext from "@/context";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +12,8 @@ function sleep(ms: number) {
 }
 
 const CounterSortVisualizer = () => {
-  const { speedValue, isPlaying, input, target } = useContext(AppContext);
+  const { speedValue, isPlaying, input, target, setMarkers } =
+    useContext(AppContext);
 
   const [arrayVisualization, setArrayVisualization] = useState<
     BinarySearchAnimationInterface[]
@@ -62,15 +63,12 @@ const CounterSortVisualizer = () => {
   }, [animations]);
 
   useEffect(() => {
-    // Function to update windowWidth whenever the window is resized
     const handleResize = () => {
       setContainerWidth(0.7 * window.innerWidth);
     };
 
-    // Attach the event listener when the component mounts
     window.addEventListener("resize", handleResize);
 
-    // Remove the event listener when the component unmounts to prevent memory leaks
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -88,6 +86,16 @@ const CounterSortVisualizer = () => {
         index: index,
         value: value,
         type: "none",
+        currentLineMarkers: [
+          {
+            startRow: 1,
+            startCol: 0,
+            endRow: 1,
+            endCol: 1000,
+            className: "myMarker",
+            type: "text",
+          },
+        ],
       };
       return newValue;
     });
@@ -114,7 +122,7 @@ const CounterSortVisualizer = () => {
         const animation = animationsRef.current.shift();
         if (animation) {
           let newArray = [...arrayVisualization];
-          const { color, index, type } = animation;
+          const { color, index, type, currentLineMarkers } = animation;
 
           const targetElementIndex = newArray.findIndex(
             (value) => value.index == index
@@ -127,6 +135,7 @@ const CounterSortVisualizer = () => {
 
           await sleep(3000 / speedRef.current);
           setAnimations(animationsRef.current);
+          setMarkers(currentLineMarkers!);
         }
       }
     }

@@ -47,12 +47,12 @@ export class Link {
 export class DivideAndConquerArray {
   height: number = 0;
   Map: Map<number, NodeTree>;
-  distance: number = 75;
+  distance: number = 0;
   nodes: NodeTree[] = [];
   links: Link[] = [];
   linkMap: Map<string, Link>;
   heightForQuickSort: number = 0;
-  distanceQuickSort: number = 100;
+  distanceQuickSort: number = 10;
   constructor(array: number[], type: "mergesort" | "quicksort") {
     this.Map = new Map<number, NodeTree>();
     this.linkMap = new Map<string, Link>();

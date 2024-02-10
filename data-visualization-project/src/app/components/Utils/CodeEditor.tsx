@@ -62,12 +62,9 @@ const CodeEditor = () => {
       fetchFile("/codefiles/postordertraversal.py");
     }
     if (visualizationCategory === 1 && visualizationOption === 3) {
-      fetchFile("/codefiles/prim.py");
-    }
-    if (visualizationCategory === 1 && visualizationOption === 4) {
       fetchFile("/codefiles/levelordertraversal.py");
     }
-    if (visualizationCategory === 1 && visualizationOption === 5) {
+    if (visualizationCategory === 1 && visualizationOption === 4) {
       fetchFile("/codefiles/lowestcommonancestor.py");
     }
     if (visualizationCategory === 2 && visualizationOption === 0) {
@@ -84,6 +81,12 @@ const CodeEditor = () => {
     }
     if (visualizationCategory === 2 && visualizationOption === 5) {
       fetchFile("/codefiles/cycledetection.py");
+    }
+    if (visualizationCategory === 2 && visualizationOption === 6) {
+      fetchFile("/codefiles/prim.py");
+    }
+    if (visualizationCategory === 2 && visualizationOption === 7) {
+      fetchFile("/codefiles/levelordergraphtraversal.py");
     }
   }, [visualizationCategory, visualizationOption]);
 

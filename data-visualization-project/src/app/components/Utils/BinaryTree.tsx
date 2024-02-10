@@ -4,13 +4,14 @@ import { NodeWidthAndHeight } from "../VisualizationComponents/BinaryTreeVisuali
 import { IMarker } from "react-ace";
 
 export interface BinaryTreeAnimationInterface {
-  type: "node" | "link";
+  type: "node" | "link" | "none";
   nodeId?: number;
   linkId?: string;
   currentLineMarkers: IMarker[];
   color: string;
-  values: number[];
+  values?: number[];
   lowest?: number;
+  queue?: Node[];
 }
 
 export interface Link {

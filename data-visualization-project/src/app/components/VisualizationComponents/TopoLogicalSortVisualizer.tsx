@@ -3,312 +3,374 @@ import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
-import EditGraphModal, { Node, NodeStatic, PathVertex } from "../Utils/EditGraphModal";
+import EditGraphModal, {
+  Node,
+  NodeStatic,
+  PathVertex,
+} from "../Utils/EditGraphModal";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import { topoLogicalSortVisualizationInterface } from "@/app/interfaces/GraphSearchVisualizationInterface";
 import { topologicalSort } from "@/app/visualization-algorithms/TopoLogicalSort";
 
 function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 const TopoLogicalSortVisualizer = () => {
-    const {
-        visualizationOption,
-        speedValue,
-        isPlaying,
-        input,
-        setMarkers
-    } = useContext(AppContext);
+  const { visualizationOption, speedValue, isPlaying, input, setMarkers } =
+    useContext(AppContext);
 
-    const [speed, setSpeed] = useState<number>(1);
-    const [isPlayingValue, setIsPlayingValue] = useState<boolean>(true);
-    const speedRef = useRef<number>(speed);
-    const isPlayingRef = useRef<boolean>(isPlayingValue);
-    const [showEditGraphModal, setShowEditGraphModal] = useState<boolean>(false);
-    const [nodes, setNodes] = useState<Node[]>([]);
-    const [paths, setPaths] = useState<PathVertex[]>([]);
-    const [graph, setGraph] = useState<Map<string, string[]>>(new Map<string, string[]>());
-    const animationsRef = useRef<topoLogicalSortVisualizationInterface[]>([]);
-    const [animations, setAnimations] = useState<topoLogicalSortVisualizationInterface[]>([]);
-    const [searchValue, setSearchValues] = useState<number[]>([]);
+  const [speed, setSpeed] = useState<number>(1);
+  const [isPlayingValue, setIsPlayingValue] = useState<boolean>(true);
+  const speedRef = useRef<number>(speed);
+  const isPlayingRef = useRef<boolean>(isPlayingValue);
+  const [showEditGraphModal, setShowEditGraphModal] = useState<boolean>(false);
+  const [nodes, setNodes] = useState<Node[]>([]);
+  const [paths, setPaths] = useState<PathVertex[]>([]);
+  const [graph, setGraph] = useState<Map<string, string[]>>(
+    new Map<string, string[]>()
+  );
+  const animationsRef = useRef<topoLogicalSortVisualizationInterface[]>([]);
+  const [animations, setAnimations] = useState<
+    topoLogicalSortVisualizationInterface[]
+  >([]);
+  const [searchValue, setSearchValues] = useState<number[]>([]);
+  const [resultOrder, setResultOrder] = useState<number[]>([]);
 
-    useEffect(() => {
-        isPlayingRef.current = isPlayingValue;
-    }, [isPlayingValue]);
+  useEffect(() => {
+    isPlayingRef.current = isPlayingValue;
+  }, [isPlayingValue]);
 
-    useEffect(() => {
-        speedRef.current = speed;
-    }, [speed]);
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
 
-    useEffect(() => {
-        isPlayingRef.current = isPlayingValue;
-        processAnimations();
-    }, [isPlayingValue]);
+  useEffect(() => {
+    isPlayingRef.current = isPlayingValue;
+    processAnimations();
+  }, [isPlayingValue]);
 
-    useEffect(() => {
-        setSpeed(speedValue);
-    }, [speedValue]);
+  useEffect(() => {
+    setSpeed(speedValue);
+  }, [speedValue]);
 
-    useEffect(() => {
-        async function rerender() {
-            animationsRef.current = [...animations];
-            await processAnimations();
+  useEffect(() => {
+    async function rerender() {
+      animationsRef.current = [...animations];
+      await processAnimations();
+    }
+    rerender();
+  }, [animations]);
+
+  useEffect(() => {
+    if (animationsRef.current.length > 0) {
+      setAnimations([]);
+    }
+  }, [graph]);
+
+  const buildGraph = (nodes: Node[], paths: PathVertex[]) => {
+    let newGraph = new Map<string, string[]>();
+    let newNodes = [...nodes];
+    let newPaths = [...paths];
+    for (let i = 0; i < newNodes.length; i++) {
+      newNodes[i].color = "transparent";
+    }
+    for (let i = 0; i < newPaths.length; i++) {
+      newPaths[i].color = "black";
+    }
+    setSearchValues([]);
+    setNodes(nodes);
+    setPaths(paths);
+    nodes.forEach((node) => {
+      newGraph.set(node.id, []);
+    });
+    paths.forEach((path) => {
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].id === path.startNodeId) {
+          let endNodes = newGraph.get(nodes[i].id);
+          if (endNodes)
+            newGraph.set(nodes[i].id, endNodes.concat(path.endNodeId));
         }
-        rerender();
-    }, [animations]);
+      }
+    });
+    setGraph(newGraph);
+  };
 
-    useEffect(() => {
-        if (animationsRef.current.length > 0) {
-            setAnimations([]);
-        }
-    }, [graph]);
+  const resetNodesAndPaths = () => {
+    setSearchValues([]);
+    setResultOrder([]);
+    const newNodes = [...nodes];
+    const newPaths = [...paths];
+    for (let i = 0; i < newNodes.length; i++) {
+      newNodes[i].color = "transparent";
+    }
+    for (let i = 0; i < newPaths.length; i++) {
+      newPaths[i].color = "black";
+    }
+    setNodes(newNodes);
+    setPaths(newPaths);
+  };
 
-    const buildGraph = (nodes: Node[], paths: PathVertex[]) => {
-        let newGraph = new Map<string, string[]>();
+  const visualizeGraph = () => {
+    let animations: topoLogicalSortVisualizationInterface[] = [];
+    animations = topologicalSort(graph);
+    if (animationsRef.current.length > 0) {
+      setAnimations([]);
+      resetNodesAndPaths();
+    } else {
+      resetNodesAndPaths();
+      animationsRef.current = animations;
+      setAnimations(animations);
+    }
+  };
+
+  const processAnimations = async () => {
+    if (animationsRef.current.length > 0) {
+      if (isPlayingRef.current) {
+        const animation = animationsRef.current.shift();
         let newNodes = [...nodes];
         let newPaths = [...paths];
-        for (let i = 0; i < newNodes.length; i++) {
-            newNodes[i].color = 'transparent';
-        }
-        for (let i = 0; i < newPaths.length; i++) {
-            newPaths[i].color = 'black';
-        }
-        setSearchValues([]);
-        setNodes(nodes);
-        setPaths(paths);
-        nodes.forEach(node => {
-            newGraph.set(node.id, []);
-        });
-        paths.forEach(path => {
-            for (let i = 0; i < nodes.length; i++) {
-                if (nodes[i].id === path.startNodeId) {
-                    let endNodes = newGraph.get(nodes[i].id);
-                    if (endNodes) newGraph.set(nodes[i].id, endNodes.concat(path.endNodeId));
-                }
+        if (animation) {
+          const {
+            type,
+            nodeId,
+            pathStartId,
+            pathEndId,
+            nodeColor,
+            pathColor,
+            searchValue,
+            currentLineMarkers,
+            resultOrder,
+          } = animation;
+          if (type === "node") {
+            for (let i = 0; i < newNodes.length; i++) {
+              if (newNodes[i].id === nodeId && nodeColor) {
+                newNodes[i].color = nodeColor;
+              }
             }
-        });
-        setGraph(newGraph);
-    };
-
-    const resetNodesAndPaths = () => {
-        setSearchValues([]);
-        const newNodes = [...nodes];
-        const newPaths = [...paths];
-        for (let i = 0; i < newNodes.length; i++) {
-            newNodes[i].color = 'transparent';
-        }
-        for (let i = 0; i < newPaths.length; i++) {
-            newPaths[i].color = 'black';
-        }
-        setNodes(newNodes);
-        setPaths(newPaths);
-    };
-
-    const visualizeGraph = () => {
-        let animations: topoLogicalSortVisualizationInterface[] = [];
-        animations = topologicalSort(graph);
-        if (animationsRef.current.length > 0) {
-            setAnimations([]);
-            resetNodesAndPaths();
-        } else {
-            resetNodesAndPaths();
-            animationsRef.current = animations;
-            setAnimations(animations);
-        }
-    };
-
-    const processAnimations = async () => {
-        if (animationsRef.current.length > 0) {
-            if (isPlayingRef.current) {
-                const animation = animationsRef.current.shift();
-                let newNodes = [...nodes];
-                let newPaths = [...paths];
-                if (animation) {
-                    const {
-                        type,
-                        nodeId,
-                        pathStartId,
-                        pathEndId,
-                        nodeColor,
-                        pathColor,
-                        searchValue,
-                        currentLineMarkers
-                    } = animation;
-                    if (type === "node") {
-                        for (let i = 0; i < newNodes.length; i++) {
-                            if (newNodes[i].id === nodeId && nodeColor) {
-                                newNodes[i].color = nodeColor;
-                            }
-                        }
-                    } else if (type === "path") {
-                        for (let i = 0; i < newPaths.length; i++) {
-                            if (
-                                newPaths[i].startNodeId === pathStartId &&
-                                newPaths[i].endNodeId === pathEndId &&
-                                pathColor
-                            ) {
-                                newPaths[i].color = pathColor;
-                            }
-                        }
-                    }
-                    let newSearchValues: number[] = [];
-                    searchValue.map(value => {
-                        for (let i = 0; i < nodes.length; i++) {
-                            if (nodes[i].id === value) {
-                                newSearchValues.push(nodes[i].value);
-                            }
-                        }
-                    });
-                    setSearchValues(newSearchValues);
-                    setNodes(newNodes);
-                    setPaths(newPaths);
-                    setMarkers(currentLineMarkers);
-                    await sleep(3000 / speedRef.current);
-                    setAnimations(animationsRef.current);
-                }
+          } else if (type === "path") {
+            for (let i = 0; i < newPaths.length; i++) {
+              if (
+                newPaths[i].startNodeId === pathStartId &&
+                newPaths[i].endNodeId === pathEndId &&
+                pathColor
+              ) {
+                newPaths[i].color = pathColor;
+              }
             }
+          }
+
+          let newSearchValues: number[] = [];
+          if (searchValue) {
+            searchValue.map((value) => {
+              for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].id === value) {
+                  newSearchValues.push(nodes[i].value);
+                }
+              }
+            });
+            setSearchValues(newSearchValues);
+          }
+
+          let newresultOrder: number[] = [];
+          if (resultOrder) {
+            resultOrder.map((value) => {
+              for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].id === value) {
+                  newresultOrder.push(nodes[i].value);
+                }
+              }
+            });
+            setResultOrder(newresultOrder);
+          }
+
+          setNodes(newNodes);
+          setPaths(newPaths);
+          setMarkers(currentLineMarkers);
+          await sleep(3000 / speedRef.current);
+          setAnimations(animationsRef.current);
         }
-    };
+      }
+    }
+  };
 
-    const handleStartNodeValue = (id: string) => {
-        // Implement this function if needed
-    };
+  const handleStartNodeValue = (id: string) => {
+    // Implement this function if needed
+  };
 
-    return (
-        <>
-            <EditGraphModal
-                show={showEditGraphModal}
-                handleClose={() => {
-                    setShowEditGraphModal(false);
-                }}
-                buildGraph={buildGraph}
-                setStartNode={handleStartNodeValue}
-            />
-            <div
-                style={{
-                    marginTop: '30px',
-                }}
+  return (
+    <>
+      <EditGraphModal
+        show={showEditGraphModal}
+        handleClose={() => {
+          setShowEditGraphModal(false);
+        }}
+        buildGraph={buildGraph}
+        setStartNode={handleStartNodeValue}
+      />
+      <div
+        style={{
+          marginTop: "30px",
+        }}
+      >
+        <Button
+          onClick={() => {
+            setShowEditGraphModal(true);
+          }}
+          style={{
+            marginBottom: "10px",
+          }}
+        >
+          Edit Graph
+        </Button>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+          maxWidth: "100%",
+          overflow: "scroll",
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            width: 800,
+            height: 800,
+            borderStyle: "solid",
+          }}
+        >
+          <Xwrapper>
+            {paths.map((path, index) => {
+              return (
+                <div key={index}>
+                  <Xarrow
+                    start={"node" + path.startNodeId}
+                    end={"node" + path.endNodeId}
+                    color={path.color}
+                    strokeWidth={5}
+                    path="straight"
+                    labels={{
+                      middle: (
+                        <div
+                          style={{
+                            position: "absolute",
+                            margin: "10px",
+                          }}
+                        >
+                          {path.weigth}
+                        </div>
+                      ),
+                    }}
+                  />
+                </div>
+              );
+            })}
+            {nodes &&
+              nodes.map((node, index) => {
+                return (
+                  <NodeStatic
+                    key={index}
+                    id={node.id}
+                    value={node.value}
+                    position={node.position}
+                    color={node.color}
+                  />
+                );
+              })}
+          </Xwrapper>
+        </div>
+        <div
+          style={{
+            marginTop: "10px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignSelf: "flex-start",
+            }}
+          >
+            <span
+              style={{ marginRight: "3px", fontSize: "15px", padding: "5px" }}
             >
-                <Button
-                    onClick={() => {
-                        setShowEditGraphModal(true);
-                    }}
-                    style={{
-                        marginBottom: '10px',
-                    }}
+              Visited:{" "}
+            </span>
+            {searchValue.map((value, index) => {
+              return (
+                <div
+                  key={index}
+                  style={{
+                    padding: "5px",
+                    borderStyle: "solid",
+                    borderWidth: "1px",
+                    fontSize: "15px",
+                    width: "fit-content",
+                  }}
                 >
-                    Edit Graph
-                </Button>
-            </div>
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    maxWidth: '100%',
-                    overflow: 'scroll',
-                }}
+                  {value}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div
+          style={{
+            marginTop: "10px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignSelf: "flex-start",
+            }}
+          >
+            <span
+              style={{ marginRight: "3px", fontSize: "15px", padding: "5px" }}
             >
+              Result:{" "}
+            </span>
+            {resultOrder.map((value, index) => {
+              return (
                 <div
-                    style={{
-                        position: 'relative',
-                        width: 800,
-                        height: 800,
-                        borderStyle: 'solid',
-                    }}
+                  key={index}
+                  style={{
+                    padding: "5px",
+                    borderStyle: "solid",
+                    borderWidth: "1px",
+                    fontSize: "15px",
+                    width: "fit-content",
+                  }}
                 >
-                    <Xwrapper>
-                        {paths.map((path, index) => {
-                            return (
-                                <div key={index}>
-                                    <Xarrow
-                                        start={'node' + path.startNodeId}
-                                        end={'node' + path.endNodeId}
-                                        color={path.color}
-                                        strokeWidth={5}
-                                        path="straight"
-                                        labels={{
-                                            middle: (
-                                                <div
-                                                    style={{
-                                                        position: 'absolute',
-                                                        margin: '10px',
-                                                    }}
-                                                >
-                                                    {path.weigth}
-                                                </div>
-                                            ),
-                                        }}
-                                    />
-                                </div>
-                            );
-                        })}
-                        {nodes &&
-                            nodes.map((node, index) => {
-                                return (
-                                    <NodeStatic
-                                        key={index}
-                                        id={node.id}
-                                        value={node.value}
-                                        position={node.position}
-                                        color={node.color}
-                                    />
-                                );
-                            })}
-                    </Xwrapper>
+                  {value}
                 </div>
-                <div
-                    style={{
-                        marginTop: '10px',
-                    }}
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignSelf: 'flex-start',
-                        }}
-                    >
-                        {searchValue.map((value, index) => {
-                            return (
-                                <div
-                                    key={index}
-                                    style={{
-                                        padding: '20px',
-                                        borderStyle: 'solid',
-                                        borderWidth: '2px',
-                                        fontSize: '35px',
-                                        width: 'fit-content',
-                                    }}
-                                >
-                                    {value}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-                <div
-                    style={{
-                        marginTop: '30px',
-                        marginBottom: '30px',
-                    }}
-                >
-                    <Button
-                        onClick={async () => {
-                            visualizeGraph();
-                        }}
-                    >
-                        {animationsRef.current.length > 0 ? (
-                            <FontAwesomeIcon icon={faStop} />
-                        ) : (
-                            <FontAwesomeIcon icon={faPlay} />
-                        )}
-                    </Button>
-                </div>
-            </div>
-        </>
-    );
+              );
+            })}
+          </div>
+        </div>
+        <div
+          style={{
+            marginTop: "30px",
+            marginBottom: "30px",
+          }}
+        >
+          <Button
+            onClick={async () => {
+              visualizeGraph();
+            }}
+          >
+            {animationsRef.current.length > 0 ? (
+              <FontAwesomeIcon icon={faStop} />
+            ) : (
+              <FontAwesomeIcon icon={faPlay} />
+            )}
+          </Button>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default TopoLogicalSortVisualizer;

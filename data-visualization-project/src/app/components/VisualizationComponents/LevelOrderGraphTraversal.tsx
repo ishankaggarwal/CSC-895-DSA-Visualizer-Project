@@ -11,13 +11,13 @@ import EditGraphModal, {
 } from "../Utils/EditGraphModal";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import { BreadthFirstSearchVisualizationInterface } from "@/app/interfaces/GraphSearchVisualizationInterface";
-import { LevelOrderTraversal } from "../../visualization-algorithms/LevelOrderTraversal";
+import { LevelOrderTraversalGraph } from "@/app/visualization-algorithms/levelOrderTraversalGraph";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-const LevelOrderTraversalVisualizer = () => {
+const LevelOrderGraphTraversalVisualizer = () => {
   const { visualizationOption, speedValue, isPlaying, setMarkers } =
     useContext(AppContext);
 
@@ -37,6 +37,7 @@ const LevelOrderTraversalVisualizer = () => {
     BreadthFirstSearchVisualizationInterface[]
   >([]);
   const animationsRef = useRef<BreadthFirstSearchVisualizationInterface[]>([]);
+  const [queue, setQueue] = useState<number[]>([]);
 
   useEffect(() => {
     isPlayingRef.current = isPlayingValue;
@@ -117,7 +118,7 @@ const LevelOrderTraversalVisualizer = () => {
 
   const visualizeGraph = () => {
     let animations: BreadthFirstSearchVisualizationInterface[] = [];
-    animations = LevelOrderTraversal(graph, startNode);
+    animations = LevelOrderTraversalGraph(graph, startNode);
     if (animationsRef.current.length > 0) {
       setAnimations([]);
       resetNodesAndPaths();
@@ -143,6 +144,7 @@ const LevelOrderTraversalVisualizer = () => {
             pathColor,
             searchValue,
             currentLineMarkers,
+            queue,
           } = animation;
           if (type === "node") {
             for (let i = 0; i < newNodes.length; i++) {
@@ -162,14 +164,29 @@ const LevelOrderTraversalVisualizer = () => {
             }
           }
           let newSearchValues: number[] = [];
-          searchValue.map((value) => {
-            for (let i = 0; i < nodes.length; i++) {
-              if (nodes[i].id === value) {
-                newSearchValues.push(nodes[i].value);
+          if (searchValue) {
+            searchValue.map((value) => {
+              for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].id === value) {
+                  newSearchValues.push(nodes[i].value);
+                }
               }
-            }
-          });
-          setSearchValues(newSearchValues);
+            });
+            setSearchValues(newSearchValues);
+          }
+
+          let newQueueValue: number[] = [];
+
+          if (queue) {
+            queue.map((value) => {
+              for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].id === value) {
+                  newQueueValue.push(nodes[i].value);
+                }
+              }
+            });
+            setQueue(newQueueValue);
+          }
           setNodes(newNodes);
           setPaths(newPaths);
           setMarkers(currentLineMarkers);
@@ -262,7 +279,7 @@ const LevelOrderTraversalVisualizer = () => {
               nodes.map((node, index) => {
                 return (
                   <NodeStatic
-                    key={index}
+                    key={node.id}
                     id={node.id}
                     value={node.value}
                     position={node.position}
@@ -282,13 +299,50 @@ const LevelOrderTraversalVisualizer = () => {
               display: "flex",
               alignSelf: "flex-start",
               alignItems: "center",
+              marginBottom: "10px",
             }}
           >
             {
               <>
                 <div
                   style={{
-                    fontSize: "35px",
+                    fontSize: "15px",
+                    marginRight: "10px",
+                  }}
+                >
+                  Queue:{" "}
+                </div>
+                {queue.map((value, index) => {
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        padding: "3px",
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        fontSize: "15px",
+                        width: "fit-content",
+                      }}
+                    >
+                      {value}
+                    </div>
+                  );
+                })}
+              </>
+            }
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignSelf: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            {
+              <>
+                <div
+                  style={{
+                    fontSize: "15px",
                     marginRight: "10px",
                   }}
                 >
@@ -299,10 +353,10 @@ const LevelOrderTraversalVisualizer = () => {
                     <div
                       key={index}
                       style={{
-                        padding: "20px",
+                        padding: "3px",
                         borderStyle: "solid",
-                        borderWidth: "2px",
-                        fontSize: "35px",
+                        borderWidth: "1px",
+                        fontSize: "15px",
                         width: "fit-content",
                       }}
                     >
@@ -337,4 +391,4 @@ const LevelOrderTraversalVisualizer = () => {
   );
 };
 
-export default LevelOrderTraversalVisualizer;
+export default LevelOrderGraphTraversalVisualizer;

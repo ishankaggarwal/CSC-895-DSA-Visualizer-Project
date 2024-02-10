@@ -164,15 +164,18 @@ const CycleDetectionInGraphVisualizer = () => {
           }
 
           let newSearchValues: number[] = [];
-          searchValue.map((value: any) => {
-            for (let i = 0; i < nodes.length; i++) {
-              if (nodes[i].id === value) {
-                newSearchValues.push(nodes[i].value);
-              }
-            }
-          });
 
-          setSearchValues(newSearchValues);
+          if (searchValue) {
+            searchValue.map((value) => {
+              for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].id === value) {
+                  newSearchValues.push(nodes[i].value);
+                }
+              }
+            });
+            setSearchValues(newSearchValues);
+          }
+
           setNodes(newNodes);
           setPaths(newPaths);
           setMarkers(currentLineMarkers);
@@ -257,7 +260,7 @@ const CycleDetectionInGraphVisualizer = () => {
               nodes.map((node, index) => {
                 return (
                   <NodeStatic
-                    key={index}
+                    key={node.id}
                     id={node.id}
                     value={node.value}
                     position={node.position}

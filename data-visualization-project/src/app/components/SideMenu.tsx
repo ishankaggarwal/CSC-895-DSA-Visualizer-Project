@@ -55,16 +55,12 @@ export const items = [
         subCategoryValue: 2,
       },
       {
-        subCategoryName: "Prim Algorithm",
+        subCategoryName: "Level Order Traversal",
         subCategoryValue: 3,
       },
       {
-        subCategoryName: "Level Order Traversal",
-        subCategoryValue: 4,
-      },
-      {
         subCategoryName: "Lowest Common Ancestor",
-        subCategoryValue: 5,
+        subCategoryValue: 4,
       },
     ],
   },
@@ -95,6 +91,14 @@ export const items = [
       {
         subCategoryName: "Cycle Detection In Graph",
         subCategoryValue: 5,
+      },
+      {
+        subCategoryName: "Prim Algorithm",
+        subCategoryValue: 6,
+      },
+      {
+        subCategoryName: "Level Order Algorithm",
+        subCategoryValue: 7,
       },
     ],
   },

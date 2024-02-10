@@ -10,6 +10,21 @@ export const LowestCommonAncestor = (
   node1: number,
   node2: number
 ): Node | null => {
+  animations.push({
+    type: "none",
+    currentLineMarkers: [
+      {
+        startRow: 1,
+        startCol: 0,
+        endRow: 1,
+        endCol: 1000,
+        className: "myMarker",
+        type: "text",
+      },
+    ],
+    color: "transparent",
+  });
+
   if (root === null) {
     return null;
   }
@@ -37,9 +52,9 @@ export const LowestCommonAncestor = (
       type: "node",
       currentLineMarkers: [
         {
-          startRow: 7,
+          startRow: 6,
           startCol: 0,
-          endRow: 7,
+          endRow: 6,
           endCol: 1000,
           className: "myMarker",
           type: "text",
@@ -59,6 +74,22 @@ export const LowestCommonAncestor = (
     node1,
     node2
   );
+
+  animations.push({
+    type: "none",
+    currentLineMarkers: [
+      {
+        startRow: 9,
+        startCol: 0,
+        endRow: 9,
+        endCol: 1000,
+        className: "myMarker",
+        type: "text",
+      },
+    ],
+    color: "transparent",
+  });
+
   const rightLCA: Node | null = LowestCommonAncestor(
     root.right,
     animations,
@@ -67,6 +98,35 @@ export const LowestCommonAncestor = (
     node2
   );
 
+  animations.push({
+    type: "none",
+    currentLineMarkers: [
+      {
+        startRow: 10,
+        startCol: 0,
+        endRow: 10,
+        endCol: 1000,
+        className: "myMarker",
+        type: "text",
+      },
+    ],
+    color: "transparent",
+  });
+
+  animations.push({
+    type: "none",
+    currentLineMarkers: [
+      {
+        startRow: 13,
+        startCol: 0,
+        endRow: 13,
+        endCol: 1000,
+        className: "myMarker",
+        type: "text",
+      },
+    ],
+    color: "transparent",
+  });
   if (leftLCA !== null && rightLCA !== null) {
     // Add animation for finding the LCA
     animations.push({

@@ -64,7 +64,7 @@ const InputBox = () => {
           </div>
         </>
       )}
-      {visualizationCategory === 1 && visualizationOption === 5 && (
+      {visualizationCategory === 1 && visualizationOption === 4 && (
         <>
           <div
             style={{

@@ -14,6 +14,7 @@ import { traverseTreeInorder } from "@/app/visualization-algorithms/inordertrave
 import { traverseTreePreorder } from "@/app/visualization-algorithms/preordertraversal";
 import { traverseTreePostOrder } from "@/app/visualization-algorithms/postorder";
 import { LowestCommonAncestor } from "@/app/visualization-algorithms/LowestCommonAncestor";
+import { LevelOrderTraversal } from "@/app/visualization-algorithms/LevelOrderTraversal";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -71,6 +72,8 @@ const BinaryTreeVisualizer = () => {
   const initialCreateRef = useRef<boolean>(false);
 
   const [values, setValues] = useState<number[]>([]);
+
+  const [queue, setQueue] = useState<Node[]>([]);
 
   useEffect(() => {
     isPlayingRef.current = isPlayingValue;
@@ -155,7 +158,10 @@ const BinaryTreeVisualizer = () => {
     if (visualizationOption === 2) {
       traverseTreePostOrder(root, animations, values);
     }
-    if (visualizationOption === 5) {
+    if (visualizationOption === 3) {
+      LevelOrderTraversal(root, animations, values);
+    }
+    if (visualizationOption === 4) {
       LowestCommonAncestor(root, animations, values, node1, node2);
     }
     if (animationsRef.current.length > 0) {
@@ -183,6 +189,7 @@ const BinaryTreeVisualizer = () => {
             currentLineMarkers,
             values,
             lowest,
+            queue,
           } = animation;
           if (type === "node") {
             for (let i = 0; i < newNodes.length; i++) {
@@ -204,7 +211,12 @@ const BinaryTreeVisualizer = () => {
           setMarkers(currentLineMarkers);
           setNodes(newNodes);
           setLinks(newLinks);
-          setValues(values);
+          if (values) {
+            setValues(values);
+          }
+          if (queue) {
+            setQueue(queue);
+          }
           await sleep(3000 / speedRef.current);
           setAnimations(animationsRef.current);
         }
@@ -263,9 +275,10 @@ const BinaryTreeVisualizer = () => {
                 position: "absolute",
               }}
             >
-              {links.map((link) => {
+              {links.map((link, index) => {
                 return (
                   <line
+                    key={index}
                     x1={link.sy}
                     y1={link.sx}
                     x2={link.ey}
@@ -283,7 +296,7 @@ const BinaryTreeVisualizer = () => {
             display: "flex",
           }}
         >
-          {visualizationOption == 5 && lowest && (
+          {visualizationOption == 4 && lowest && (
             <div
               style={{
                 display: "flex",
@@ -317,11 +330,13 @@ const BinaryTreeVisualizer = () => {
               </div>
             </div>
           )}
-          {visualizationOption != 5 &&
+          {visualizationOption != 3 &&
+            visualizationOption != 4 &&
             values.map((value, index) => {
               if (value) {
                 return (
                   <div
+                    key={index}
                     style={{
                       margin: "10px",
                       alignSelf: "flex-end",
@@ -333,6 +348,75 @@ const BinaryTreeVisualizer = () => {
                         borderStyle: "solid",
                         borderWidth: "2px",
                         fontSize: "35px",
+                        width: "fit-content",
+                      }}
+                      key={index}
+                      id={"value" + index}
+                    >
+                      {value}
+                    </div>
+                  </div>
+                );
+              }
+            })}
+        </div>
+        <div>
+          {visualizationOption == 3 && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <span>Queue: </span>
+              {visualizationOption == 3 &&
+                queue.map((node) => {
+                  return (
+                    <div
+                      style={{
+                        padding: "4px",
+                        borderStyle: "solid",
+                        borderWidth: "2px",
+                        fontSize: "15px",
+                        width: "fit-content",
+                        display: "inline",
+                        margin: "5px",
+                      }}
+                      key={node.id}
+                      id={"node" + node.id}
+                    >
+                      {node.value}
+                    </div>
+                  );
+                })}
+            </div>
+          )}
+        </div>
+        <div style={{ display: "flex" }}>
+          {visualizationOption == 3 && (
+            <span style={{ fontSize: "15px", marginTop: "10px" }}>
+              Result:{" "}
+            </span>
+          )}
+          {visualizationOption == 3 &&
+            values.map((value, index) => {
+              if (value) {
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      margin: "5px",
+                      alignSelf: "flex-end",
+                    }}
+                  >
+                    <div
+                      style={{
+                        padding: "4px",
+                        borderStyle: "solid",
+                        borderWidth: "2px",
+                        fontSize: "15px",
                         width: "fit-content",
                       }}
                       key={index}

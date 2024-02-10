@@ -16,7 +16,7 @@ export interface DjikstraAlgorithmVisualizationInterface {
 }
 
 export interface FloydWarshallVisualizationInterface {
-  type: "node" | "path";
+  type: "node" | "path" | "none";
   nodeId?: string;
   pathStartId?: string;
   pathEndId?: string;
@@ -30,7 +30,7 @@ export interface FloydWarshallVisualizationInterface {
 }
 
 export interface PrimAlgorithmVisualizationInterface {
-  type: "node" | "path" | "value";
+  type?: "node" | "path" | "value";
   nodeId?: string;
   pathStartId?: string;
   pathEndId?: string;
@@ -38,7 +38,8 @@ export interface PrimAlgorithmVisualizationInterface {
   pathColor?: string;
   rowNodeID?: string;
   columnNodeID?: string;
-  distance?: string;
+  distance?: number;
   cellColor?: string;
   searchValue?: Set<string>;
+  currentLineMarkers: IMarker[];
 }

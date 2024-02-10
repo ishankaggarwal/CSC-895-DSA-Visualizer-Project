@@ -18,6 +18,32 @@ export function counterSort(array: number[]) {
       valueI: count[array[i]],
       indexI: array[i],
       type: "count",
+      currentLineMarkers: [
+        {
+          startRow: 8,
+          startCol: 0,
+          endRow: 8,
+          endCol: 1000,
+          className: "myMarker",
+          type: "text",
+        },
+      ],
+    });
+    animations.push({
+      colorI: "purple",
+      valueI: count[array[i]],
+      indexI: array[i],
+      type: "count",
+      currentLineMarkers: [
+        {
+          startRow: 9,
+          startCol: 0,
+          endRow: 9,
+          endCol: 1000,
+          className: "myMarker",
+          type: "text",
+        },
+      ],
     });
   }
 
@@ -29,6 +55,16 @@ export function counterSort(array: number[]) {
       valueI: count[i],
       indexI: i,
       type: "count",
+      currentLineMarkers: [
+        {
+          startRow: 13,
+          startCol: 0,
+          endRow: 13,
+          endCol: 1000,
+          className: "myMarker",
+          type: "text",
+        },
+      ],
     });
     while (count[i] > 0) {
       animations.push({
@@ -36,6 +72,16 @@ export function counterSort(array: number[]) {
         valueI: i,
         indexI: sortedIndex,
         type: "output",
+        currentLineMarkers: [
+          {
+            startRow: 14,
+            startCol: 0,
+            endRow: 14,
+            endCol: 1000,
+            className: "myMarker",
+            type: "text",
+          },
+        ],
       });
 
       array[sortedIndex++] = i;
@@ -46,6 +92,16 @@ export function counterSort(array: number[]) {
         valueI: count[i],
         indexI: i,
         type: "count",
+        currentLineMarkers: [
+          {
+            startRow: 14,
+            startCol: 0,
+            endRow: 14,
+            endCol: 1000,
+            className: "myMarker",
+            type: "text",
+          },
+        ],
       });
     }
   }

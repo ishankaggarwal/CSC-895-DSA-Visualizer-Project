@@ -3,12 +3,13 @@ import {
   CountingSortArrayVisualizationAnimationInterface,
   SelectionSortArrayVisualizationInterface,
 } from "@/app/interfaces/SelectionSortArrayVisualizationInterface";
-import { counterSort } from "../../visualization-algorithms/CounterSort";
+import { counterSort } from "@/app/visualization-algorithms/CounterSort";
 import AppContext from "@/context";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
+import { setMaxIdleHTTPParsers } from "http";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -22,6 +23,7 @@ const CounterSortVisualizer = () => {
     setHoverValue,
     setIsHovered,
     setPosition,
+    setMarkers,
   } = useContext(AppContext);
 
   const [arrayVisualization, setArrayVisualization] = useState<
@@ -131,7 +133,8 @@ const CounterSortVisualizer = () => {
         const animation = animationsRef.current.shift();
         if (animation) {
           let newArray = [...arrayVisualization];
-          const { colorI, valueI, indexI, type } = animation;
+          const { colorI, valueI, indexI, type, currentLineMarkers } =
+            animation;
 
           const targetElementIndex = newArray.findIndex(
             (value) => value.index === indexI && value.type === type
@@ -144,6 +147,7 @@ const CounterSortVisualizer = () => {
           }
           await sleep(3000 / speedRef.current);
           setAnimations(animationsRef.current);
+          setMarkers(currentLineMarkers);
         }
       }
     }
@@ -239,7 +243,7 @@ const CounterSortVisualizer = () => {
                   <div
                     style={{
                       width: "100%",
-                      height: value.value * 0.2,
+                      height: value.value * 0.1,
                       backgroundColor: "green",
                     }}
                     onMouseMove={(e) => {

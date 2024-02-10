@@ -24,6 +24,7 @@ export interface CountingSortArrayVisualizationAnimationInterface {
   indexI: number;
   colorI: string;
   type: string;
+  currentLineMarkers: IMarker[];
 }
 
 const SelectionSortArrayVisualizationInterfaceComponent = () => {
