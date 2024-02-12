@@ -6,5 +6,6 @@ color: string;
 value ?: number;
 type?: "low" | "high" | "mid" | "result" | "none";
 currentLineMarkers : IMarker[];
+found ?: number;
 }
 

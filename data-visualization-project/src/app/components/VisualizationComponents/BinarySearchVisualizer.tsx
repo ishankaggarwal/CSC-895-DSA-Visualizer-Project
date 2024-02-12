@@ -27,6 +27,7 @@ const CounterSortVisualizer = () => {
   const isPlayingRef = useRef<boolean>(isPlayingValue);
   const animationsRef = useRef<BinarySearchAnimationInterface[]>([]);
   const [barWidth, setBarWidth] = useState<number>(100);
+  const [found, setFound] = useState<number>();
   const marginWidth = 1;
   const [containerWidth, setContainerWidth] = useState<number>(
     0.7 * window.innerWidth
@@ -63,12 +64,15 @@ const CounterSortVisualizer = () => {
   }, [animations]);
 
   useEffect(() => {
+    // Function to update windowWidth whenever the window is resized
     const handleResize = () => {
       setContainerWidth(0.7 * window.innerWidth);
     };
 
+    // Attach the event listener when the component mounts
     window.addEventListener("resize", handleResize);
 
+    // Remove the event listener when the component unmounts to prevent memory leaks
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -100,6 +104,7 @@ const CounterSortVisualizer = () => {
       return newValue;
     });
 
+    setFound(undefined);
     setArrayVisualization(newArray);
   };
 
@@ -122,7 +127,7 @@ const CounterSortVisualizer = () => {
         const animation = animationsRef.current.shift();
         if (animation) {
           let newArray = [...arrayVisualization];
-          const { color, index, type, currentLineMarkers } = animation;
+          const { color, index, type, currentLineMarkers, found } = animation;
 
           const targetElementIndex = newArray.findIndex(
             (value) => value.index == index
@@ -133,9 +138,13 @@ const CounterSortVisualizer = () => {
             newArray[targetElementIndex].type = type;
           }
 
+          if (found) {
+            setFound(found);
+          }
+
           await sleep(3000 / speedRef.current);
           setAnimations(animationsRef.current);
-          setMarkers(currentLineMarkers!);
+          setMarkers(currentLineMarkers);
         }
       }
     }
@@ -170,7 +179,7 @@ const CounterSortVisualizer = () => {
                     minWidth: marginWidth * 2,
                   }}
                 >
-                  <p>{value.index}</p>
+                  <p style={{ textAlign: "center" }}>{value.index}</p>
                   <div
                     style={{
                       width: "100%",
@@ -206,6 +215,31 @@ const CounterSortVisualizer = () => {
           })}
         </div>
       </div>
+      <div
+        style={{
+          display: "flex",
+          alignSelf: "flex-start",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <div style={{ padding: "5px" }}>Result Index:</div>
+
+        {found && (
+          <div
+            style={{
+              borderStyle: "solid",
+              borderWidth: "1px",
+              textAlign: "center",
+              overflow: "hidden",
+              padding: "5px",
+            }}
+          >
+            {found}
+          </div>
+        )}
+      </div>
+
       <div
         style={{
           marginTop: "20px",
