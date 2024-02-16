@@ -1,3 +1,4 @@
+'use client';
 import { BubbleSortArrayVisualizationAnimationInterface, BubbleSortArrayVisualizationInterface } from "@/app/interfaces/BubbleSortArrayVIsualizationInterface";
 import { BubbleSort } from "@/app/visualization-algorithms/bubblesort";
 import { InsertionSort } from "@/app/visualization-algorithms/insertionsort";
@@ -7,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import HoverComponent from "../Utils/HoverComponent";
+import dynamic from "next/dynamic";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -37,24 +39,32 @@ const BubbleSortArrayVisualizer = () =>{
     const animationsRef = useRef<BubbleSortArrayVisualizationAnimationInterface[]>([]);
     const [barHeight,setBarHeight] = useState<number>(0);
     const [barWidth,setBarWidth] = useState<number>(100);
-    const [containerWidth,setContainerWidth] = useState<number>(0.7*window.innerWidth);
+    const [containerWidth,setContainerWidth] = useState<number>(0);
     const marginWidth = 1;
     const itemEls = useRef<any>({});
 
-  useEffect(() => {
-    // Function to update windowWidth whenever the window is resized
-    const handleResize = () => {
-        setContainerWidth(0.7*window.innerWidth);
-    };
+    useEffect(() => {
+        if (typeof window === "undefined" || window === null) {
+            // Early return if window is not defined
+            return;
+        }
 
-    // Attach the event listener when the component mounts
-    window.addEventListener('resize', handleResize);
+        // Function to update windowWidth whenever the window is resized
+        const handleResize = () => {
+            setContainerWidth(0.7*window.innerWidth);
+        };
 
-    // Remove the event listener when the component unmounts to prevent memory leaks
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+        // Attach the event listener when the component mounts
+        window.addEventListener('resize', handleResize);
+
+        handleResize();
+
+        // Remove the event listener when the component unmounts to prevent memory leaks
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+
+    }, []);
 
   useEffect(()=>{
     const n = arrayVisualization.length;
@@ -235,5 +245,6 @@ const BubbleSortArrayVisualizer = () =>{
         </>
     )
 }
+  
 
 export default BubbleSortArrayVisualizer;

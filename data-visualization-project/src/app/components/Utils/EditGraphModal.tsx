@@ -721,7 +721,7 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
                     {
                         paths.map((path,index)=>{
                             return(
-                                <div onMouseDown={(e)=>{
+                                <div key={index} onMouseDown={(e)=>{
                                     console.log("path clicked");
                                     if(cursor==="crosshair")
                                     {
@@ -756,6 +756,7 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
                                         nodes.map((node,index)=>{
                                             return(
                                                 <Node 
+                                                key={index}
                                                 id={node.id}
                                                 value={node.value} 
                                                 position={node.position} 
