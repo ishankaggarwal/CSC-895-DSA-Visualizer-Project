@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Konva from "konva";
 import dynamic from "next/dynamic";
 import React, { ForwardedRef, useContext, useRef, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import { Circle, Layer, Rect, Stage, Text } from "react-konva";
 import Xarrow, { useXarrow, Xwrapper } from "react-xarrows";
@@ -430,8 +430,10 @@ const EditGraphModal: React.FC<EditGraphModalInterface> = ({
   const graphRef = useRef<HTMLDivElement>(null);
 
   const [paths, setPaths] = useState<PathVertex[]>([]);
-
   const [startNodeValue, setStartNodeValue] = useState(0);
+    const [showAlert,setShowAlert] = useState(false);
+
+    const [alertMessage,setAlertMessage] = useState("");
 
   const changeCursor = () => {
     setCursor((prevState) => {
@@ -607,7 +609,25 @@ const EditGraphModal: React.FC<EditGraphModalInterface> = ({
     const newNodes = [...nodes, newNode];
     nodeMap.current.set(id, newNode);
     setNodes(newNodes);
-  };
+        let value = 0;
+        while(checkIfNodeValueExists(value))
+        {
+            value+=1;
+        }
+        const id = uuidv4();
+        const newNode : Node ={
+            id: id,
+            value: value,
+            position: {
+                x: getRandomBetween(100,700),
+                y: getRandomBetween(100,700)
+            },
+            color: 'transparent'
+        }
+        const newNodes = [...nodes,newNode];
+        nodeMap.current.set(id,newNode);
+        setNodes(newNodes);
+    }
 
   const deletePath = (index: number) => {
     const newPaths = [...paths];
@@ -637,124 +657,194 @@ const EditGraphModal: React.FC<EditGraphModalInterface> = ({
         setStartNode(nodes[i].id);
       }
     }
+        let nodeValueMap = new Map<number,boolean>();
+        for(let i=0;i<nodes.length;i++)
+        {
+            if(nodeValueMap.get(nodes[i].value))
+            {
+                setShowAlert(true);
+                setAlertMessage("Graph Invalid! There are two or more nodes with the same value");
+                return;
+            }
+            else{
+                nodeValueMap.set(nodes[i].value,true);
+            }
+        }
+        let startNodeInNodes = nodes.filter(node=>node.value===startNodeValue).length === 0;
+        if(startNodeInNodes)
+        {
+            setShowAlert(true);
+            setAlertMessage("The given start node does not exist in the graph");
+            return;
+        }
     handleClose();
   };
+  
+      const checkIfNodeValueExists = (value: number)=>{
+        const nodesWithValue = nodes.filter(node=>{
+            if(node.value==value)
+            {
+                return node;
+            }
+        })
 
-  return (
-    <Modal show={show} onHide={handleClose} fullscreen>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Graph</Modal.Title>
-      </Modal.Header>
-      <Modal.Body
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            width: "300px",
-            justifyContent: "space-between",
-            marginBottom: "10px",
-            flexDirection: "column",
-            marginRight: "40px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              width: "300px",
-              justifyContent: "space-between",
-              marginBottom: "10px",
-            }}
-          >
-            <Button onClick={addNode}>Add Node</Button>
+        if(nodesWithValue.length>0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+
+    return(
+        <Modal show={show} onHide={handleClose} fullscreen>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Graph</Modal.Title>
+        </Modal.Header>
+                {
+            showAlert &&   
+            <Alert dismissible onClose={()=>setShowAlert(false)} variant="danger">
+                {alertMessage}
+            </Alert>
+        }
+        <Modal.Body style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
+            <div style={{
+                display: 'flex',
+                width: '300px',
+                justifyContent: 'space-between',
+                marginBottom: '10px',
+                flexDirection: 'column',
+                marginRight: '40px'
+            }}>
+                      <div style={{
+                display: 'flex',
+                width: '300px',
+                justifyContent: 'space-between',
+                marginBottom: '10px',
+            }}>
+            <Button onClick={addNode}>
+                Add Node
+            </Button>
             <Button onClick={changeCursor}>
               {cursor === "pointer" ? "Set Delete Mode" : "Unset Delete Mode"}
             </Button>
-          </div>
-          <Form.Group
-            style={{
-              width: "100%",
-            }}
-          >
-            <Form.Control
-              type="number"
-              placeholder="Set Start Node"
-              value={startNodeValue}
-              onChange={(e) => {
-                setStartNodeValue(Number(e.target.value));
-              }}
-            />
-          </Form.Group>
-        </div>
-        <div
-          ref={graphRef}
-          style={{
-            position: "relative",
-            width: 800,
-            height: 800,
-            borderStyle: "solid",
-            cursor: cursor,
-          }}
-          onMouseMove={(e) => {
-            if (path && graphRef.current) {
-              var bounds = graphRef.current.getBoundingClientRect();
-              var x = e.clientX - bounds.left;
-              var y = e.clientY - bounds.top;
-              let newPath: PathInterface = {
-                x1: currentPathInitialCoordiantes.x,
-                y1: currentPathInitialCoordiantes.y,
-                x2: x.toString(),
-                y2: y.toString(),
-              };
-              setCurrentPath(newPath);
-              console.log(x, y);
-            }
-          }}
-          onMouseUp={(e) => {
-            console.log(path, finalNode);
-            if (path) {
-              if (finalVertex !== "") {
-                handleValueOfFinalVertex(finalVertex);
-              }
-            }
-            handleSetPath(false, "", "");
-            setCurrentPath({
-              x1: "",
-              x2: "",
-              y1: "",
-              y2: "",
-            });
-          }}
-        >
-          <svg
-            width={800}
-            height={800}
-            style={{
-              position: "absolute",
-            }}
-          >
-            {path && currentPath !== undefined && (
-              <Path
-                x1={currentPath.x1}
-                y1={currentPath.y1}
-                x2={currentPath.x2}
-                y2={currentPath.y2}
-              />
-            )}
-          </svg>
-          <Xwrapper>
-            {paths.map((path, index) => {
-              return (
-                <div
-                  key={index}
-                  onMouseDown={(e) => {
-                    console.log("path clicked");
-                    if (cursor === "crosshair") {
-                      deletePath(index);
+            </div>
+            <Form.Group style={{
+                width: '100%'
+            }}>
+                <Form.Label>Set Start Node Below</Form.Label>
+                <Form.Control type="number" placeholder="Set Start Node" value={startNodeValue} onChange={(e)=>{
+                    setStartNodeValue(Number(e.target.value));
+                }}/>
+            </Form.Group>
+            </div>
+            <div ref={graphRef} style={{
+                position: 'relative',
+                width: 800,
+                height: 800,
+                borderStyle: 'solid',
+                cursor: cursor
+            }} onMouseMove={(e)=>{
+                if(path && graphRef.current)
+                {
+                    var bounds = graphRef.current.getBoundingClientRect();
+                    var x = e.clientX - bounds.left;
+                    var y = e.clientY - bounds.top;
+                   let newPath : PathInterface ={
+                       x1: currentPathInitialCoordiantes.x,
+                       y1: currentPathInitialCoordiantes.y,
+                       x2: x.toString(),
+                       y2: y.toString()
+                   }
+                   setCurrentPath(newPath);
+                   console.log(x,y);
+                }
+            }} onMouseUp={(e)=>{
+                console.log(path,finalNode);
+                if(path)
+                {
+                    if(finalVertex!=="")
+                    {
+                        handleValueOfFinalVertex(finalVertex);
+                    }
+                }
+                handleSetPath(false,"","");
+                setCurrentPath({
+                    x1: "",
+                    x2: "",
+                    y1: "",
+                    y2: "",
+                })
+            }} >
+            <svg width={800} height={800} style={{
+                position: 'absolute',
+            }}>
+                {
+
+                    (path && currentPath!==undefined) && <Path x1={currentPath.x1} y1={currentPath.y1} x2={currentPath.x2} y2={currentPath.y2} />
+                }
+            </svg>
+                <Xwrapper>
+                    {
+                        paths.map((path,index)=>{
+                            return(
+                                <div onMouseDown={(e)=>{
+                                    console.log("path clicked");
+                                    if(cursor==="crosshair")
+                                    {
+                                        deletePath(index);
+                                    }
+                                }} id={index.toString()}>
+                                <Xarrow start={path.startNodeId} end={path.endNodeId} color="black" strokeWidth={5} path="straight" labels={{
+                                    middle: (visualizationOption !==0 && visualizationOption!==1) ? <div style={
+                                        {
+                                            position: 'absolute',
+                                            margin: '10px'
+                                        }
+                                    }><input  type="number" style={{
+                                        backgroundColor: 'transparent',
+                                        color: 'black',
+                                        width: 'fit-content',
+                                        borderStyle: 'none',
+                                    }} onChange={(e)=>{
+                                        let newPath = {...path};
+                                        newPath.weigth = Number(e.target.value);
+                                        let newPaths = [...paths];
+                                        newPaths[index] = newPath;
+                                        setPaths(newPaths);
+                                    }} value={path.weigth}/></div>
+                                    : <></> 
+                                }} />
+                                </div>
+                            )
+                        })
+                    }
+                                        {
+                                        nodes.map((node,index)=>{
+                                            return(
+                                                <Node 
+                                                id={node.id}
+                                                value={node.value} 
+                                                position={node.position} 
+                                                handleDrag={handleDrag} 
+                                                handleDragEnd={handleDragEnd} 
+                                                index={index} 
+                                                handleSetPath={handleSetPath} 
+                                                graphRef={graphRef} 
+                                                path={path} 
+                                                handleValueOfInitialVertex={handleValueOfInitialVertex}
+                                                handleValueOfFinalVertex={handleValueOfFinalVertex}
+                                                handleFinalNode={handleFinalNode}
+                                                changeValueOfVertex={changeValueOfVertex}
+                                                cursor={cursor}
+                                                deleteNode={deleteNode}/>
+                                            )
+                                        })
                     }
                   }}
                   id={index.toString()}
