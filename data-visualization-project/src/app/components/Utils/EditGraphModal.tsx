@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Konva from "konva";
 import dynamic from "next/dynamic";
 import React, { ForwardedRef, useContext, useRef, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import { Circle, Layer, Rect, Stage, Text } from "react-konva";
 import Xarrow, {useXarrow, Xwrapper} from 'react-xarrows';
@@ -372,6 +372,10 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
 
     const [startNodeValue,setStartNodeValue] = useState(0);
 
+    const [showAlert,setShowAlert] = useState(false);
+
+    const [alertMessage,setAlertMessage] = useState("");
+
 
   const changeCursor = () => {
     setCursor(prevState => {
@@ -533,7 +537,11 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
 
     const addNode = ()=>{
 
-        const value = nodes.length;
+        let value = 0;
+        while(checkIfNodeValueExists(value))
+        {
+            value+=1;
+        }
         const id = uuidv4();
         const newNode : Node ={
             id: id,
@@ -570,6 +578,26 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
     }
 
     const hanldeSave = () =>{
+        let nodeValueMap = new Map<number,boolean>();
+        for(let i=0;i<nodes.length;i++)
+        {
+            if(nodeValueMap.get(nodes[i].value))
+            {
+                setShowAlert(true);
+                setAlertMessage("Graph Invalid! There are two or more nodes with the same value");
+                return;
+            }
+            else{
+                nodeValueMap.set(nodes[i].value,true);
+            }
+        }
+        let startNodeInNodes = nodes.filter(node=>node.value===startNodeValue).length === 0;
+        if(startNodeInNodes)
+        {
+            setShowAlert(true);
+            setAlertMessage("The given start node does not exist in the graph");
+            return;
+        }
         buildGraph(nodes,paths);
         for(let i=0;i<nodes.length;i++)
         {
@@ -581,12 +609,33 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
         handleClose();
     }
 
+    const checkIfNodeValueExists = (value: number)=>{
+        const nodesWithValue = nodes.filter(node=>{
+            if(node.value==value)
+            {
+                return node;
+            }
+        })
+
+        if(nodesWithValue.length>0)
+        {
+            return true;
+        }
+        return false;
+    }
+
 
     return(
         <Modal show={show} onHide={handleClose} fullscreen>
         <Modal.Header closeButton>
           <Modal.Title>Edit Graph</Modal.Title>
         </Modal.Header>
+                {
+            showAlert &&   
+            <Alert dismissible onClose={()=>setShowAlert(false)} variant="danger">
+                {alertMessage}
+            </Alert>
+        }
         <Modal.Body style={{
             display: 'flex',
             alignItems: 'center',
@@ -616,6 +665,7 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
             <Form.Group style={{
                 width: '100%'
             }}>
+                <Form.Label>Set Start Node Below</Form.Label>
                 <Form.Control type="number" placeholder="Set Start Node" value={startNodeValue} onChange={(e)=>{
                     setStartNodeValue(Number(e.target.value));
                 }}/>
