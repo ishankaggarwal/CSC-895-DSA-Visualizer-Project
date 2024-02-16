@@ -390,7 +390,7 @@ const DjikstraAlgorithmVisualizer = () =>{
                     {
                         paths.map((path,index)=>{
                             return(
-                                <div>
+                                <div key={index}>
                                 <Xarrow start={'node'+path.startNodeId} end={'node'+path.endNodeId} color={path.color} strokeWidth={5} path="straight" labels={{
                                     middle: (visualizationOption !==0 && visualizationOption!==1) ? <div style={
                                         {
@@ -407,7 +407,7 @@ const DjikstraAlgorithmVisualizer = () =>{
                     {
                     nodes && nodes.map((node,index)=>{
                         return(
-                            <NodeStatic id={node.id} value={node.value} position={node.position} color={node.color}/>
+                            <NodeStatic key={index} id={node.id} value={node.value} position={node.position} color={node.color}/>
                         )
                     })
                     }
@@ -427,8 +427,8 @@ const DjikstraAlgorithmVisualizer = () =>{
                         fontSize: '35px',
                         marginRight: '10px'
                     }}>Queue: </div>
-                    {queue.map(value=>{
-                        return(<div style={{
+                    {queue.map((value,index)=>{
+                        return(<div key={index} style={{
                             padding: '20px',
                             borderStyle: 'solid',
                             borderWidth: '2px',

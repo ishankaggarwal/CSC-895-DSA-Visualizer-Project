@@ -187,6 +187,7 @@ const BubbleSortArrayVisualizer = () =>{
             {
                 arrayVisualization.map((value,index)=>{
                     return (
+                        // eslint-disable-next-line react/jsx-key
                         <div style={{
                             alignSelf: 'flex-end',
                             width: barWidth,

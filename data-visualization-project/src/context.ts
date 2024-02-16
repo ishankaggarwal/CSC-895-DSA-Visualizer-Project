@@ -28,6 +28,12 @@ interface ContextInterface{
     }>>,
     hoverValue: number,
     setHoverValue: Dispatch<SetStateAction<number>>,
+    target: number;
+    setTarget : Dispatch<SetStateAction<any>>;
+    node1: number;
+    setNode1 : Dispatch<SetStateAction<any>>;
+    node2: number;
+    setNode2 : Dispatch<SetStateAction<any>>;
 }
 
 
@@ -74,7 +80,19 @@ const AppContext = createContext<ContextInterface>({
     hoverValue: 0,
     setHoverValue: function (value: SetStateAction<number>): void {
         throw new Error("Function not implemented.");
-    }
+    },
+    target: 0,
+    setTarget : function (value: SetStateAction<number>): void {
+        throw new Error("Function not implemented.");
+    },
+    node1: 0,
+    setNode1 : function (value: SetStateAction<number>): void {
+        throw new Error("Function not implemented.");
+    },
+    node2: 0,
+    setNode2 : function (value: SetStateAction<number>): void {
+        throw new Error("Function not implemented.");
+    },
 });
 
 export default AppContext;
