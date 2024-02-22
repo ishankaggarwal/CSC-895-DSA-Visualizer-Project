@@ -68,7 +68,7 @@ const BubbleSortArrayVisualizer = () =>{
 
   useEffect(()=>{
     const n = arrayVisualization.length;
-    setBarWidth((containerWidth-(2*marginWidth*n))/n);
+    setBarWidth(((containerWidth-50)-(2*marginWidth*n))/n);
   },[containerWidth,arrayVisualization]);
 
 
@@ -188,7 +188,8 @@ const BubbleSortArrayVisualizer = () =>{
             justifyContent: 'center',
             alignItems: 'center',
             overflow: 'scroll',
-            width: containerWidth,
+            width: containerWidth-50,
+            padding: '10px'
         }}>
             <div style={{
                 display: 'flex',
@@ -207,8 +208,10 @@ const BubbleSortArrayVisualizer = () =>{
                                 <div style={{
                                 width: '100%',
                                 height: value.value*barHeight,
-                                backgroundColor: 'green',
-                            }}       onMouseMove={(e)=>{
+                                backgroundColor: value.color === 'transparent' ? 'green' : value.color,
+                            }} onMouseOver={(e)=>{
+                                handleMouseEnter(e,value.value);
+                            }}      onMouseMove={(e)=>{
                                 handleMouseEnter(e,value.value);
                             }}
                             onMouseLeave={handleMouseLeave}>

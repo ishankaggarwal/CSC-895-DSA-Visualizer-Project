@@ -47,7 +47,7 @@ export class Link {
 export class DivideAndConquerArray {
   height: number = 0;
   Map: Map<number, NodeTree>;
-  distance: number = 0;
+  distance: number = 10;
   nodes: NodeTree[] = [];
   links: Link[] = [];
   linkMap: Map<string, Link>;

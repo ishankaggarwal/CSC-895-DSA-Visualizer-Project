@@ -93,7 +93,7 @@ const InsertionSortArrayVisualizer = () => {
 
   useEffect(() => {
     const n = arrayVisualization.length;
-    setBarWidth((containerWidth - 2 * marginWidth * n) / n);
+    setBarWidth(((containerWidth-50) - 2 * marginWidth * n) / n);
   }, [containerWidth, arrayVisualization]);
 
   const handleMouseEnter = (
@@ -175,7 +175,7 @@ const InsertionSortArrayVisualizer = () => {
           justifyContent: "center",
           alignItems: "center",
           overflow: "scroll",
-          width: containerWidth,
+          width: containerWidth-50,
         }}
       >
         <div
@@ -199,12 +199,14 @@ const InsertionSortArrayVisualizer = () => {
                   style={{
                     width: "100%",
                     height: value.value * barHeight,
-                    backgroundColor: "green",
+                    backgroundColor: value.color === 'transparent' ? 'green' : value.color,
                   }}
-                  onMouseMove={(e) => {
-                    handleMouseEnter(e, value.value);
-                  }}
-                  onMouseLeave={handleMouseLeave}
+                  onMouseOver={(e)=>{
+                    handleMouseEnter(e,value.value);
+                }}      onMouseMove={(e)=>{
+                    handleMouseEnter(e,value.value);
+                }}
+                onMouseLeave={handleMouseLeave}
                 ></div>
                 <div
                   style={{

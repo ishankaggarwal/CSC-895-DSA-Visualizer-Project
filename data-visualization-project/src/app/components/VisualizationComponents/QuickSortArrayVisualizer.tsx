@@ -309,14 +309,20 @@ const QuickSortVisualizer = () => {
                             style={{
                               width: "100%",
                               height: value * barHeight,
-                              backgroundColor: "green",
+                              backgroundColor:  index === node.indexI
+                              ? node.colorI === 'transparent' ? 'green' : node.colorI
+                              : index === node.indexJ
+                              ? node.colorJ === 'transparent' ? 'green' : node.colorJ
+                              : "green",
                             }}
+                            onMouseOver={(e)=>{
+                              handleMouseEnter(e,value);
+                          }}      onMouseMove={(e)=>{
+                              handleMouseEnter(e,value);
+                          }}
+                          onMouseLeave={handleMouseLeave}
                           ></div>
                           <div
-                            onMouseMove={(e) => {
-                              handleMouseEnter(e, value);
-                            }}
-                            onMouseLeave={handleMouseLeave}
                             style={{
                               padding: "3px",
                               borderWidth: "1px",

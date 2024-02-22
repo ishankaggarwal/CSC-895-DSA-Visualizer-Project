@@ -108,6 +108,7 @@ const MergeSortVisualizer = () => {
     setWidth(arrayTree.returnWidth());
     console.log(arrayTree.nodes);
     setNodes(arrayTree.nodes);
+    console.log(arrayTree.distance);
     setBarHeight(arrayTree.distance / Math.max(...arr));
     divideAndConquerTree.current = arrayTree;
   };
@@ -212,18 +213,24 @@ const MergeSortVisualizer = () => {
                         alignSelf: "flex-end",
                       }}
                     >
+                          <div
+                            style={{
+                              width: "100%",
+                              height: value * barHeight,
+                              backgroundColor:  index === node.indexI
+                              ? node.colorI === 'transparent' ? 'green' : node.colorI
+                              : index === node.indexJ
+                              ? node.colorJ === 'transparent' ? 'green' : node.colorJ
+                              : "green",
+                            }}
+                            onMouseOver={(e)=>{
+                              handleMouseEnter(e,value);
+                          }}      onMouseMove={(e)=>{
+                              handleMouseEnter(e,value);
+                          }}
+                          onMouseLeave={handleMouseLeave}
+                          ></div>
                       <div
-                        style={{
-                          width: "100%",
-                          height: value * barHeight,
-                          backgroundColor: "green",
-                        }}
-                      ></div>
-                      <div
-                        onMouseMove={(e) => {
-                          handleMouseEnter(e, value);
-                        }}
-                        onMouseLeave={handleMouseLeave}
                         style={{
                           padding: "3px",
                           borderWidth: "1px",
