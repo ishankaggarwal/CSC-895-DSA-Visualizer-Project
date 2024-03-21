@@ -240,16 +240,20 @@ const DepthFirstSearchAlgorithmVisualizer = () => {
                     strokeWidth={5}
                     path="straight"
                     labels={{
-                      middle: (
-                        <div
-                          style={{
-                            position: "absolute",
-                            margin: "10px",
-                          }}
-                        >
-                          {path.weigth}
-                        </div>
-                      ),
+                      middle:
+                        (visualizationOption !== 0 &&
+                        visualizationOption !== 1) ? (
+                          <div
+                            style={{
+                              position: "absolute",
+                              margin: "10px",
+                            }}
+                          >
+                            {path.weigth}
+                          </div>
+                        ) : (
+                          <></>
+                        ),
                     }}
                   />
                 </div>

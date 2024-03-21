@@ -71,6 +71,9 @@ const CodeEditor = () => {
     if (visualizationCategory === 2 && visualizationOption === 1) {
       fetchFile("/codefiles/bfs.py");
     }
+    if (visualizationCategory === 2 && visualizationOption === 2) {
+      fetchFile("/codefiles/djikstra.py");
+    }
     if (visualizationCategory === 2 && visualizationOption === 3) {
       fetchFile("/codefiles/topologicalsort.py");
     }

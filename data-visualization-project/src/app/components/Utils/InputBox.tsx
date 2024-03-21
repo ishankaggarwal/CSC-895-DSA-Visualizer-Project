@@ -3,7 +3,7 @@ import AppContext from "@/context";
 import { Button, Form, OverlayTrigger, Tooltip, TooltipProps } from "react-bootstrap";
 import Papa from 'papaparse';
 
-const renderTooltip = (props: JSX.IntrinsicAttributes & TooltipProps & RefAttributes<HTMLDivElement>, tooltipText: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | PromiseLikeOfReactNode | null | undefined) => (
+export const renderTooltip = (props: JSX.IntrinsicAttributes & TooltipProps & RefAttributes<HTMLDivElement>, tooltipText: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | PromiseLikeOfReactNode | null | undefined) => (
   <Tooltip id="button-tooltip" {...props}>
     {tooltipText}
   </Tooltip>

@@ -268,8 +268,8 @@ const BreadthFirstSearchAlgorithmVisualizer = () => {
                     path="straight"
                     labels={{
                       middle:
-                        visualizationOption !== 0 &&
-                        visualizationOption !== 1 ? (
+                        (visualizationOption !== 0 &&
+                        visualizationOption !== 1) ? (
                           <div
                             style={{
                               position: "absolute",

@@ -2,14 +2,13 @@
 import AppContext from "@/context";
 import { faArrowDown, faArrowLeft, faArrowRight, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Konva from "konva";
-import dynamic from "next/dynamic";
-import React, { ForwardedRef, useContext, useRef, useState } from "react";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import { Alert, Button, Form, Modal, OverlayTrigger } from "react-bootstrap";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-import { Circle, Layer, Rect, Stage, Text } from "react-konva";
-import Xarrow, {useXarrow, Xwrapper} from 'react-xarrows';
+import Xarrow, {Xwrapper} from 'react-xarrows';
 import { v4 as uuidv4 } from 'uuid';
+import Papa from 'papaparse';
+import { renderTooltip } from "./InputBox";
 
 interface PathInterface{
     x1: string;
@@ -17,6 +16,8 @@ interface PathInterface{
     x2: string;
     y2: string;
 }
+
+type Force = { x: number, y: number };
 
 function clamp(min: number, max: number,value: number) {
     return Math.min(Math.max(value, min), max);
@@ -376,6 +377,16 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
 
     const [alertMessage,setAlertMessage] = useState("");
 
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const repulsionConst: number = 10000;
+    const springLength: number = 100;
+    const attractionConst: number = 0.1;
+
+    const width: number = 600;
+    const height: number = 600;
+
+    const iterations : number = 100;
 
   const changeCursor = () => {
     setCursor(prevState => {
@@ -535,6 +546,175 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    const repulsionForce = (distance: number): number => {
+        return repulsionConst / (distance * distance);
+    }
+
+    const attractionForce = (distance: number): number  => {
+        return attractionConst * (distance - springLength);
+    }
+
+    const processCSVInput = (fileArray : string[][]) => {
+
+        let nodes : Node[] = [];
+
+        fileArray.forEach(array=>{
+            array.forEach(element=>{
+                try{
+                    
+                    const numElement = parseFloat(element);
+                    const nodesWithValue = nodes.filter(node=>{
+                        if(node.value==numElement)
+                        {
+                            return node;
+                        }
+                    })
+            
+                    if(nodesWithValue.length===0)
+                    {
+                        const id = uuidv4();
+                        let newNode : Node ={
+                            id: id,
+                            value: numElement,
+                            position: {
+                                x: 100 + Math.random() * width, // Adjusted
+                                y: 100 + Math.random() * height // Adjusted
+                            },
+                            color: 'transparent'
+                        }
+                        nodes = [...nodes,newNode];
+                        nodeMap.current.set(id,newNode);
+                        console.log(nodes);
+                    }
+                }
+                catch{
+                    alert("Please make sure the CSV file contains only numeric values");
+                }
+            })
+        })
+
+        let paths : PathVertex[] = [];
+        fileArray.forEach(array=>{
+            let pathVertex : PathVertex = {
+                startNodeId: "",
+                endNodeId: "",
+                weigth: 0,
+                color: "black"
+            };
+
+            array.forEach((element,index)=>{
+                try{
+                    
+                    const numElement = parseFloat(element);
+                    nodes.forEach(node=>{
+                        if(node.value===numElement)
+                        {
+                            if(index===0)
+                                pathVertex.startNodeId = node.id;
+                            if(index===1)
+                                pathVertex.endNodeId = node.id;
+                        }
+                    })
+                    if(index===2)
+                        pathVertex.weigth = numElement;
+                }
+                catch{
+                    alert("Please make sure the CSV file contains only numeric values");
+                }
+            })
+
+            console.log(pathVertex);
+
+            paths.push(pathVertex);
+
+        })
+
+        console.log(nodes);
+
+        const deepCopiedNodes = JSON.parse(JSON.stringify(nodes));
+
+        for(let k=0;k<iterations;k++)
+        {
+
+        const forces: Force[] = Array.from ({ length: deepCopiedNodes.length }, () => ({ x: 0, y: 0 }));
+
+        // Repulsive forces
+        for (let i = 0; i < deepCopiedNodes.length; i++) {
+            for (let j = i + 1; j < deepCopiedNodes.length; j++) {
+                const dx = deepCopiedNodes[i].position.x - deepCopiedNodes[j].position.x;
+                const dy = deepCopiedNodes[i].position.y - deepCopiedNodes[j].position.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance === 0) continue; // Avoid division by zero
+                
+                const forceMagnitude = repulsionForce(distance);
+                const fx = (dx / distance) * forceMagnitude;
+                const fy = (dy / distance) * forceMagnitude;
+                
+                forces[i].x += fx;
+                forces[i].y += fy;
+                forces[j].x -= fx;
+                forces[j].y -= fy;
+            }
+        }
+
+                // Attractive forces (edges)
+                paths.forEach(path => {
+                    const nodeStart = deepCopiedNodes.find((node : Node)=>node.id===path.startNodeId);
+                    const nodeEnd = deepCopiedNodes.find((node: Node)=>node.id===path.endNodeId);
+                    if(nodeStart && nodeEnd)
+                    {
+                    const dx = nodeStart.position.x - nodeEnd.position.x;
+                    const dy = nodeStart.position.y - nodeStart.position.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    const forceMagnitude = attractionForce(distance);
+                    const fx = (dx / distance) * forceMagnitude;
+                    const fy = (dy / distance) * forceMagnitude;
+                    
+                    const startIndex = nodes.findIndex(node=>node.id===nodeStart.id);
+                    const endIndex = nodes.findIndex(node=>node.id===nodeEnd.id);
+                    forces[startIndex].x -= fx;
+                    forces[startIndex].y -= fy;
+                    forces[endIndex].x += fx;
+                    forces[endIndex].y += fy;
+                    }
+                });
+
+                console.log(forces);
+
+        console.log(deepCopiedNodes);
+                        // Update positions
+        for (let i = 0; i < deepCopiedNodes.length; i++) {
+            const nodeCopy = JSON.parse(JSON.stringify(deepCopiedNodes[i]));
+            if(i===0)
+            {
+                console.log(nodeCopy);
+                console.log(nodeCopy.position);
+                console.log(nodeCopy.position.x);
+            }
+            nodeCopy.position.x += forces[i].x;
+            nodeCopy.position.y += forces[i].y;
+            if(i===0)
+            {
+                console.log(forces[i].x);
+                console.log(nodeCopy.position.x);
+            }
+            deepCopiedNodes[i] = nodeCopy;
+        }
+    }
+
+    console.log(deepCopiedNodes);
+
+    const finalNodes = deepCopiedNodes.map((node: Node)=>{
+        node.position.x=clamp(0,650,node.position.x);
+        node.position.y=clamp(0,650,node.position.y);
+        return node;
+    })
+        setNodes(finalNodes);
+        setPaths(paths);
+
+    }
+
     const addNode = ()=>{
 
         let value = 0;
@@ -547,14 +727,22 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
             id: id,
             value: value,
             position: {
-                x: getRandomBetween(100,700),
-                y: getRandomBetween(100,700)
+                x: getRandomBetween(0,650),
+                y: getRandomBetween(0,650)
             },
             color: 'transparent'
         }
         const newNodes = [...nodes,newNode];
         nodeMap.current.set(id,newNode);
         setNodes(newNodes);
+
+        newNodes.forEach(node=>{
+            const nodeWidth = document.getElementById(id)?.clientWidth;
+            const nodeHeight = document.getElementById(id)?.clientHeight;
+            console.log(nodeWidth+" "+nodeHeight);
+        })
+
+
     }
 
     const deletePath = (index: number) =>{
@@ -624,6 +812,64 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
         return false;
     }
 
+    const uploadCSVFile = () =>{
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+          fileInputRef.current.click();
+        }
+      }
+    
+      const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if(event && event.target && event.target.files)
+        {
+            const file = event.target.files[0];
+            if (file) {
+              Papa.parse(file, {
+                complete: (result) => {
+                  console.log('Parsed Result', result.data);
+                  // Here, result.data is the CSV file content parsed into an array of arrays or objects,
+                  // depending on the options provided to Papa.parse.
+                  // You can now use this data in your application.
+                  const csvData  = result.data;
+                  try{
+                    let numArray : string[][] = [];
+                    for(let i=0;i<csvData.length;i++)
+                    {
+                      const csvArray : any = csvData[i];
+                      if(visualizationOption !==0 && visualizationOption!==1)
+                      {
+                        if (csvArray.length!==3)
+                        {
+                          throw "The Input file must contain 3 columns. The first column represents the starting vertex, the second column represents the ending vertex, and the third column represents the weight of the edge.";
+                        }
+                        numArray.push(csvArray);
+                      }
+                      else{
+                        if (csvArray.length!==2)
+                        {
+                            throw "The Input file must contain 2 columns. The first column represents the starting vertex, the second column represents the ending vertex.";
+                        }
+                    }
+                      numArray.push(csvArray);
+                    }
+
+                    console.log(numArray);
+                    processCSVInput(numArray);
+
+                    console.log(nodes);
+                  }
+                  catch (e){
+                    console.log(e);
+                    alert(e);
+                  }
+                },
+                header: false, // Set to true if the first row of the CSV contains column headers
+              });
+            }
+            event.target.value = '';
+        }
+      };
+
 
     return(
         <Modal show={show} onHide={handleClose} fullscreen>
@@ -670,6 +916,28 @@ const EditGraphModal : React.FC<EditGraphModalInterface> = ({
                     setStartNodeValue(Number(e.target.value));
                 }}/>
             </Form.Group>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                marginTop: '10px'
+            }}>
+                <Form.Label>
+                    File Input (CSV)
+                </Form.Label>
+                <OverlayTrigger
+      placement="right"
+      overlay={(props) => renderTooltip(props, (visualizationOption!==0 && visualizationOption!==1) ? "The Input file must contain 3 columns. The first column represents the starting vertex, the second column represents the ending vertex, and the third column represents the weight of the edge, and it should only contain numeric values." : "The Input file must contain 2 columns. The first column represents the starting vertex, the second column represents the ending vertex, and it should only contain numeric values.")}
+    >
+      <Button 
+      onClick={uploadCSVFile}
+        >
+          Upload CSV File
+        </Button>
+        </OverlayTrigger>
+      <input ref={fileInputRef} type="file" style={{
+        display: 'none'
+      }} accept=".csv, text/csv" onChange={handleFileChange}/>
+            </div>
             </div>
             <div ref={graphRef} style={{
                 position: 'relative',
