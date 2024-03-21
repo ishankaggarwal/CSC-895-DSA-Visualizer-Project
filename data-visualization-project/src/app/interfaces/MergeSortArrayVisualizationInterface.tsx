@@ -9,6 +9,8 @@ export interface MergeSortArrayVisualizationInterface {
   indexJ: number;
   colorI: string;
   colorJ: string;
+  iterations: number;
+  swaps: number;
 }
 
 export interface MergeSortArrayVisualizationAnimationInterface {

@@ -34,6 +34,10 @@ interface ContextInterface{
     setNode1 : Dispatch<SetStateAction<any>>;
     node2: number;
     setNode2 : Dispatch<SetStateAction<any>>;
+    iterations: number;
+    setIterations : Dispatch<SetStateAction<any>>;
+    swaps: number;
+    setSwaps : Dispatch<SetStateAction<any>>;
 }
 
 
@@ -91,6 +95,14 @@ const AppContext = createContext<ContextInterface>({
     },
     node2: 0,
     setNode2 : function (value: SetStateAction<number>): void {
+        throw new Error("Function not implemented.");
+    },
+    iterations: 0,
+    setIterations : function (value: SetStateAction<number>): void {
+        throw new Error("Function not implemented.");
+    },
+    swaps: 0,
+    setSwaps : function (value: SetStateAction<number>): void {
         throw new Error("Function not implemented.");
     },
 });

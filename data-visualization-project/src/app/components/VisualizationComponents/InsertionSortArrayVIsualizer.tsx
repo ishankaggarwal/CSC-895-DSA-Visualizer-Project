@@ -23,6 +23,8 @@ const InsertionSortArrayVisualizer = () => {
     setHoverValue,
     setIsHovered,
     setPosition,
+    setIterations,
+    setSwaps,
   } = useContext(AppContext);
 
   const [arrayVisualization, setArrayVisualization] = useState<
@@ -93,7 +95,7 @@ const InsertionSortArrayVisualizer = () => {
 
   useEffect(() => {
     const n = arrayVisualization.length;
-    setBarWidth(((containerWidth-50) - 2 * marginWidth * n) / n);
+    setBarWidth((containerWidth - 50 - 2 * marginWidth * n) / n);
   }, [containerWidth, arrayVisualization]);
 
   const handleMouseEnter = (
@@ -151,6 +153,8 @@ const InsertionSortArrayVisualizer = () => {
             indexI,
             indexJ,
             currentLineMarkers,
+            iterations,
+            swaps,
             keyValue,
           } = animation;
           newArray[indexI].value = valueI;
@@ -160,6 +164,8 @@ const InsertionSortArrayVisualizer = () => {
           setMarkers(currentLineMarkers);
           setArrayVisualization(newArray);
           setKeyValue(keyValue);
+          setIterations(iterations);
+          setSwaps(swaps);
           await sleep(3000 / speedRef.current);
           setAnimations(animationsRef.current);
         }
@@ -175,7 +181,7 @@ const InsertionSortArrayVisualizer = () => {
           justifyContent: "center",
           alignItems: "center",
           overflow: "scroll",
-          width: containerWidth-50,
+          width: containerWidth - 50,
         }}
       >
         <div
@@ -199,14 +205,16 @@ const InsertionSortArrayVisualizer = () => {
                   style={{
                     width: "100%",
                     height: value.value * barHeight,
-                    backgroundColor: value.color === 'transparent' ? 'green' : value.color,
+                    backgroundColor:
+                      value.color === "transparent" ? "green" : value.color,
                   }}
-                  onMouseOver={(e)=>{
-                    handleMouseEnter(e,value.value);
-                }}      onMouseMove={(e)=>{
-                    handleMouseEnter(e,value.value);
-                }}
-                onMouseLeave={handleMouseLeave}
+                  onMouseOver={(e) => {
+                    handleMouseEnter(e, value.value);
+                  }}
+                  onMouseMove={(e) => {
+                    handleMouseEnter(e, value.value);
+                  }}
+                  onMouseLeave={handleMouseLeave}
                 ></div>
                 <div
                   style={{

@@ -6,9 +6,9 @@ import Visualizer from "./components/Visualizer";
 import styles from "./page.module.css";
 import AppContext from "@/context";
 import { IMarker } from "react-ace";
-import InputBox from "./components/Utils/InputBox";
 import CodeEditor from "./components/Utils/CodeEditor";
 import HoverComponent from "./components/Utils/HoverComponent";
+import Counter from "./components/Utils/Counter";
 
 export default function Home() {
   const [visualizationCategory, setVisualizationCategory] = useState<number>(0);
@@ -24,6 +24,8 @@ export default function Home() {
   const [target, setTarget] = useState<number>(0);
   const [node1, setNode1] = useState<number>(0);
   const [node2, setNode2] = useState<number>(0);
+  const [iterations, setIterations] = useState<number>(0);
+  const [swaps, setSwaps] = useState<number>(0);
 
   return (
     <AppContext.Provider
@@ -54,6 +56,10 @@ export default function Home() {
         setNode1,
         node2,
         setNode2,
+        iterations,
+        setIterations,
+        swaps,
+        setSwaps,
       }}
     >
       <div className={styles.main}>
@@ -75,6 +81,10 @@ export default function Home() {
           }}
         >
           <CodeEditor />
+          {visualizationCategory === 0 &&
+            (visualizationOption === 0 ||
+              visualizationOption === 1 ||
+              visualizationOption === 2) && <Counter />}
         </div>
       </div>
     </AppContext.Provider>

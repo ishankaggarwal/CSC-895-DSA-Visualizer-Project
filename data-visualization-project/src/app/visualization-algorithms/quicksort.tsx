@@ -39,7 +39,6 @@ export function quickSort(
       return array;
     }
     const pivot = array[array.length - 1];
-    console.log(pivot);
     animations.push({
       nodeTrees: [deepCopy(nodeTree)],
       currentLineMarkers: [

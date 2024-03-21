@@ -17,6 +17,8 @@ export interface SelectionSortArrayVisualizationAnimationInterface {
   currentLineMarkers: IMarker[];
   minValue: string;
   minIndex: string;
+  iterations: number;
+  swaps: number;
 }
 
 export interface CountingSortArrayVisualizationAnimationInterface {

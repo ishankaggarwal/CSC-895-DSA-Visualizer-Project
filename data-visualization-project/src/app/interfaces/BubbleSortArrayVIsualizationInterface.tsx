@@ -13,6 +13,8 @@ export interface BubbleSortArrayVisualizationAnimationInterface {
   indexJ: number;
   colorI: string;
   colorJ: string;
+  iterations: number;
+  swaps: number;
   currentLineMarkers: IMarker[];
 }
 

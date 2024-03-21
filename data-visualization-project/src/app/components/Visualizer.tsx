@@ -27,6 +27,8 @@ const Visualizer = () => {
     position,
     hoverValue,
     isHovered,
+    setIterations,
+    setSwaps,
   } = useContext(AppContext);
   return (
     <>

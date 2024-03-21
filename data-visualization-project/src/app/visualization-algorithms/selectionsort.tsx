@@ -4,9 +4,11 @@ export const SelectionSort = (array: number[]) => {
   console.log(array);
   let animations: SelectionSortArrayVisualizationAnimationInterface[] = [];
   const n = array.length;
-
+  let swap = 0;
+  let iteration = 0;
   for (let i = 0; i < n - 1; i++) {
     let minIndex = i;
+    iteration++;
 
     animations.push({
       colorI: "yellow",
@@ -15,6 +17,8 @@ export const SelectionSort = (array: number[]) => {
       valueJ: array[i],
       indexI: i,
       indexJ: i,
+      iterations: iteration,
+      swaps: swap,
       currentLineMarkers: [
         {
           startRow: 6,
@@ -36,6 +40,8 @@ export const SelectionSort = (array: number[]) => {
       valueJ: array[i],
       indexI: i,
       indexJ: i,
+      iterations: iteration,
+      swaps: swap,
       currentLineMarkers: [
         {
           startRow: 6,
@@ -51,6 +57,7 @@ export const SelectionSort = (array: number[]) => {
     });
 
     for (let j = i + 1; j < n; j++) {
+      iteration++;
       animations.push({
         colorI: "purple",
         colorJ: "purple",
@@ -58,6 +65,8 @@ export const SelectionSort = (array: number[]) => {
         valueJ: array[j],
         indexI: j,
         indexJ: j,
+        iterations: iteration,
+        swaps: swap,
         currentLineMarkers: [
           {
             startRow: 8,
@@ -81,6 +90,8 @@ export const SelectionSort = (array: number[]) => {
           valueJ: array[j],
           indexI: j,
           indexJ: j,
+          iterations: iteration,
+          swaps: swap,
           currentLineMarkers: [
             {
               startRow: 9,
@@ -103,6 +114,8 @@ export const SelectionSort = (array: number[]) => {
         valueJ: array[j],
         indexI: j,
         indexJ: j,
+        iterations: iteration,
+        swaps: swap,
         currentLineMarkers: [
           {
             startRow: 9,
@@ -119,12 +132,15 @@ export const SelectionSort = (array: number[]) => {
     }
 
     if (minIndex !== i) {
+      swap++;
       animations.push({
         colorI: "purple",
         colorJ: "purple",
         valueI: array[i],
         valueJ: array[minIndex],
         indexI: i,
+        iterations: iteration,
+        swaps: swap,
         indexJ: minIndex,
         currentLineMarkers: [
           {
@@ -151,6 +167,8 @@ export const SelectionSort = (array: number[]) => {
         valueJ: array[minIndex],
         indexI: i,
         indexJ: minIndex,
+        iterations: iteration,
+        swaps: swap,
         currentLineMarkers: [
           {
             startRow: 13,
@@ -172,6 +190,8 @@ export const SelectionSort = (array: number[]) => {
         valueJ: array[minIndex],
         indexI: i,
         indexJ: minIndex,
+        iterations: iteration,
+        swaps: swap,
         currentLineMarkers: [
           {
             startRow: 13,

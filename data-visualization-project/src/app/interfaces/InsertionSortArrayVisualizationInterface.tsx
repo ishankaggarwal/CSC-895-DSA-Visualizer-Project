@@ -13,6 +13,8 @@ export interface InsertionSortArrayVisualizationAnimationInterface {
   indexJ: number;
   colorI: string;
   colorJ: string;
+  iterations: number;
+  swaps: number;
   currentLineMarkers: IMarker[];
   keyValue: string;
 }

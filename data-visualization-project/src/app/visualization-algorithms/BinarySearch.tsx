@@ -6,7 +6,6 @@ export function binarySearchWithAnimation(
 ): BinarySearchAnimationInterface[] {
   let animations: BinarySearchAnimationInterface[] = [];
 
-  // Binary search algorithm
   let low = 0;
   let high = sortedArray.length - 1;
   let found = false;

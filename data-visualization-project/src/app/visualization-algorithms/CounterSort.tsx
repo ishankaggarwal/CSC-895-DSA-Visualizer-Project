@@ -3,13 +3,9 @@ import { CountingSortArrayVisualizationAnimationInterface } from "../interfaces/
 export function counterSort(array: number[]) {
   let animations: CountingSortArrayVisualizationAnimationInterface[] = [];
 
-  // Find the maximum value in the array
   const max = Math.max(...array);
-
-  // Initialize count array with zeros
   const count = Array(max + 1).fill(0);
 
-  // Count the occurrences of each element in the array
   for (let i = 0; i < array.length; i++) {
     count[array[i]]++;
 

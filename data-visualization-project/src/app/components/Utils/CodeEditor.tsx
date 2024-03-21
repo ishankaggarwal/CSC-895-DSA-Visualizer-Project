@@ -3,7 +3,6 @@ import AceEditor, { IMarker } from "react-ace";
 import "ace-builds/src-noconflict/mode-python"; // or any other mode you need
 import "ace-builds/src-noconflict/theme-xcode";
 import "../../../../styles/CodeEditor.css";
-import ace from "react-ace";
 import AppContext from "@/context";
 
 const CodeEditor = () => {
@@ -15,22 +14,21 @@ const CodeEditor = () => {
     visualizationOption,
   } = useContext(AppContext);
 
-  function fetchFile(filePath: string) {
-    fetch(filePath)
-      .then((response) => response.blob())
-      .then((blob) => {
-        return blob.text();
-      })
-      .then((text) => {
-        console.log(text);
-        setEditorValue(text);
-      })
-      .catch((error) => {
-        console.error("Error fetching the file:", error);
-      });
-  }
-
   useEffect(() => {
+    function fetchFile(filePath: string) {
+      fetch(filePath)
+        .then((response) => response.blob())
+        .then((blob) => {
+          return blob.text();
+        })
+        .then((text) => {
+          console.log(text);
+          setEditorValue(text);
+        })
+        .catch((error) => {
+          console.error("Error fetching the file:", error);
+        });
+    }
     if (visualizationCategory === 0 && visualizationOption === 0) {
       fetchFile("/codefiles/bubblesort.py");
     }
@@ -88,7 +86,7 @@ const CodeEditor = () => {
     if (visualizationCategory === 2 && visualizationOption === 7) {
       fetchFile("/codefiles/levelordergraphtraversal.py");
     }
-  }, [visualizationCategory, visualizationOption]);
+  }, [visualizationCategory, visualizationOption, setEditorValue]);
 
   return (
     <AceEditor
@@ -99,7 +97,7 @@ const CodeEditor = () => {
       readOnly={true}
       markers={markers}
       style={{
-        height: "100%",
+        height: `${visualizationCategory === 0 ? "80%" : "100%"}`,
       }}
     />
   );

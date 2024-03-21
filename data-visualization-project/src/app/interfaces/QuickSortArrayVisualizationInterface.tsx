@@ -15,6 +15,8 @@ export interface QuickSortArrayVisualizationInterface {
   indexJ: number;
   colorI: string;
   colorJ: string;
+  iterations: number;
+  swaps: number;
 }
 
 export interface QuickSortArrayVisualizationAnimationInterface {

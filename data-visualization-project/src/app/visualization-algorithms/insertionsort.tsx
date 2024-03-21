@@ -3,11 +3,12 @@ import { InsertionSortArrayVisualizationAnimationInterface } from "../interfaces
 export const InsertionSort = (array: number[]) => {
   let animations: InsertionSortArrayVisualizationAnimationInterface[] = [];
   const n = array.length;
-
+  let iteration = 0;
+  let swap = 0;
   for (let i = 1; i < n; i++) {
     let key = array[i];
     let j = i - 1;
-
+    iteration++;
     animations.push({
       valueI: key,
       valueJ: key,
@@ -15,6 +16,8 @@ export const InsertionSort = (array: number[]) => {
       indexJ: i,
       colorI: "yellow",
       colorJ: "yellow",
+      iterations: iteration,
+      swaps: swap,
       currentLineMarkers: [
         {
           startRow: 5,
@@ -35,6 +38,8 @@ export const InsertionSort = (array: number[]) => {
       indexJ: i,
       colorI: "transparent",
       colorJ: "transparent",
+      iterations: iteration,
+      swaps: swap,
       currentLineMarkers: [
         {
           startRow: 5,
@@ -56,6 +61,8 @@ export const InsertionSort = (array: number[]) => {
         indexJ: j,
         colorI: "blue",
         colorJ: "blue",
+        iterations: iteration,
+        swaps: swap,
         currentLineMarkers: [
           {
             startRow: 11,
@@ -76,6 +83,8 @@ export const InsertionSort = (array: number[]) => {
         indexJ: j,
         colorI: "purple",
         colorJ: "purple",
+        iterations: iteration,
+        swaps: swap,
         currentLineMarkers: [
           {
             startRow: 12,
@@ -98,6 +107,8 @@ export const InsertionSort = (array: number[]) => {
         indexJ: j,
         colorI: "red",
         colorJ: "red",
+        iterations: iteration,
+        swaps: swap,
         currentLineMarkers: [
           {
             startRow: 12,
@@ -118,6 +129,8 @@ export const InsertionSort = (array: number[]) => {
         indexJ: j,
         colorI: "transparent",
         colorJ: "transparent",
+        iterations: iteration,
+        swaps: swap,
         currentLineMarkers: [
           {
             startRow: 12,
@@ -141,6 +154,8 @@ export const InsertionSort = (array: number[]) => {
       indexJ: j + 1,
       colorI: "purple",
       colorJ: "purple",
+      iterations: iteration,
+      swaps: swap,
       currentLineMarkers: [
         {
           startRow: 14,
@@ -155,6 +170,7 @@ export const InsertionSort = (array: number[]) => {
     });
 
     array[j + 1] = key;
+    if (j + 1 !== i) swap++;
 
     animations.push({
       valueI: array[j + 1],
@@ -163,6 +179,8 @@ export const InsertionSort = (array: number[]) => {
       indexJ: j + 1,
       colorI: "red",
       colorJ: "red",
+      iterations: iteration,
+      swaps: swap,
       currentLineMarkers: [
         {
           startRow: 14,
@@ -183,6 +201,8 @@ export const InsertionSort = (array: number[]) => {
       indexJ: j + 1,
       colorI: "transparent",
       colorJ: "transparent",
+      iterations: iteration,
+      swaps: swap,
       currentLineMarkers: [
         {
           startRow: 14,
