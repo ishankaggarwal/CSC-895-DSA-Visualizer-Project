@@ -231,16 +231,25 @@ const DjikstraAlgorithmVisualizer = () =>{
     setQueue([]);
     const newNodes = [...nodes];
     const newPaths = [...paths];
+    let newMatrix : Map<string,Cell[]> = new Map<string,Cell[]>();
+    let emptyCellRow : Cell[] = newNodes.map(node=>{
+        return {
+            id : node.id,
+            value: '',
+            color: 'transparent'
+        }
+    })
     for(let i=0;i<newNodes.length;i++)
     {
         newNodes[i].color = 'transparent';
+        newMatrix.set(newNodes[i].id,deepCopy(emptyCellRow));
     }
     for(let i=0;i<newPaths.length;i++)
     {
         newPaths[i].color = 'black';
     }
-    setNodes(newNodes);
-    setPaths(newPaths);
+
+    setMatrix(newMatrix);
    }
 
    const visualizeGraph = () =>{
