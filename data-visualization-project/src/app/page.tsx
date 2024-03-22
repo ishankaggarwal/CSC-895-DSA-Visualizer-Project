@@ -81,10 +81,12 @@ export default function Home() {
           }}
         >
           <CodeEditor />
-          {visualizationCategory === 0 &&
+          {
+            /* {visualizationCategory === 0 &&
             (visualizationOption === 0 ||
               visualizationOption === 1 ||
-              visualizationOption === 2) && <Counter />}
+              visualizationOption === 2) && */ <Counter />
+          }
         </div>
       </div>
     </AppContext.Provider>

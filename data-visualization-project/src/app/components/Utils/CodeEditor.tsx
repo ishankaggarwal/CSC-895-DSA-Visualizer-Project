@@ -100,7 +100,7 @@ const CodeEditor = () => {
       readOnly={true}
       markers={markers}
       style={{
-        height: `${visualizationCategory === 0 ? "80%" : "100%"}`,
+        height: `${"70%"}`,
       }}
     />
   );
