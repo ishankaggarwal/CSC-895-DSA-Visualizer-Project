@@ -22,7 +22,6 @@ const CodeEditor = () => {
           return blob.text();
         })
         .then((text) => {
-          console.log(text);
           setEditorValue(text);
         })
         .catch((error) => {

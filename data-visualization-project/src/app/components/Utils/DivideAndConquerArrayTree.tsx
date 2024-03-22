@@ -1,6 +1,3 @@
-import { IMarker } from "react-ace";
-import { NodeWidthAndHeight } from "../VisualizationComponents/MergeSortArrayVisualizer";
-
 export class NodeTree {
   id: number;
   value: number[];

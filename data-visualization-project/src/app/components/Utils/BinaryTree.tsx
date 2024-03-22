@@ -176,7 +176,6 @@ export class BinaryTree {
       height !== undefined &&
       width !== undefined
     ) {
-      console.log(true);
       if (root.left) {
         const positionLeftX = this.nodeMap.get(root.left.id)?.x;
         const positionLeftY = this.nodeMap.get(root.left.id)?.y;

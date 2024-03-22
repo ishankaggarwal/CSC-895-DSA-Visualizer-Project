@@ -1,10 +1,6 @@
 import { NodeTree } from "../components/Utils/DivideAndConquerArrayTree";
 import { QuickSortArrayVisualizationAnimationInterface } from "../interfaces/QuickSortArrayVisualizationInterface";
 
-function floorDivision(a: number, b: number) {
-  return Math.floor(a / b);
-}
-
 export function deepCopy(object: any) {
   if (object === undefined) {
     return undefined;
@@ -23,7 +19,6 @@ export function quickSort(
   if (array.length === 0) {
     return [];
   }
-  console.log(array);
   let nodeTree = deepCopy(map.get(j));
   if (nodeTree !== undefined) {
     nodeTree.value = deepCopy(array);

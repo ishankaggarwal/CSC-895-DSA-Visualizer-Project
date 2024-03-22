@@ -1,9 +1,3 @@
-import {
-  BubbleSortArrayVisualizationAnimationInterface,
-  BubbleSortArrayVisualizationInterface,
-} from "@/app/interfaces/BubbleSortArrayVIsualizationInterface";
-import { BubbleSort } from "@/app/visualization-algorithms/bubblesort";
-import { InsertionSort } from "@/app/visualization-algorithms/insertionsort";
 import AppContext from "@/context";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,11 +9,7 @@ import EditGraphModal, {
   PathVertex,
 } from "../Utils/EditGraphModal";
 import Xarrow, { Xwrapper } from "react-xarrows";
-import {
-  BreadthFirstSearchVisualizationInterface,
-  GraphSearchVisualizationInterface,
-} from "@/app/interfaces/GraphSearchVisualizationInterface";
-import { depthFirstSearch } from "@/app/visualization-algorithms/DepthFirstSearch";
+import { BreadthFirstSearchVisualizationInterface } from "@/app/interfaces/GraphSearchVisualizationInterface";
 import { breadthFirstSearch } from "@/app/visualization-algorithms/BreadthFirstSearch";
 
 function sleep(ms: number) {
@@ -268,8 +258,8 @@ const BreadthFirstSearchAlgorithmVisualizer = () => {
                     path="straight"
                     labels={{
                       middle:
-                        (visualizationOption !== 0 &&
-                        visualizationOption !== 1) ? (
+                        visualizationOption !== 0 &&
+                        visualizationOption !== 1 ? (
                           <div
                             style={{
                               position: "absolute",

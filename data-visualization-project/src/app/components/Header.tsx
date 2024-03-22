@@ -1,6 +1,5 @@
-import React from 'react';
-import Link from 'next/link';
-import '../../../styles/header.css';
+import React from "react";
+import "../../../styles/header.css";
 
 const Header: React.FC = () => {
   return (
@@ -13,4 +12,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-

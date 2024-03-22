@@ -1,7 +1,4 @@
-import {
-  BreadthFirstSearchVisualizationInterface,
-  GraphSearchVisualizationInterface,
-} from "../interfaces/GraphSearchVisualizationInterface";
+import { BreadthFirstSearchVisualizationInterface } from "../interfaces/GraphSearchVisualizationInterface";
 import { deepCopy } from "./mergesort";
 
 export function breadthFirstSearch(

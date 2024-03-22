@@ -6,7 +6,6 @@ import { SelectionSort } from "@/app/visualization-algorithms/selectionsort";
 import AppContext from "@/context";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { minIndex } from "d3";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 
@@ -134,7 +133,6 @@ const SelectionSortArrayVisualizer = () => {
     if (visualizationOption === 2) {
       animations = SelectionSort([...array]);
     }
-    console.log(animations);
     createArrayVisualization([...array]);
     if (animationsRef.current.length > 0) {
       setAnimations([]);

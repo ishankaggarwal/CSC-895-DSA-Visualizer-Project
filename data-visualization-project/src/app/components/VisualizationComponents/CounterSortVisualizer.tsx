@@ -9,7 +9,6 @@ import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
-import { setMaxIdleHTTPParsers } from "http";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -118,7 +117,6 @@ const CounterSortVisualizer = () => {
 
     animations = counterSort([...array]);
 
-    console.log(animations);
     createArrayVisualization([...array]);
     if (animationsRef.current.length > 0) {
       setAnimations([]);

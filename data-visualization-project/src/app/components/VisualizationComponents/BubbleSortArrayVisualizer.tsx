@@ -10,8 +10,6 @@ import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
-import HoverComponent from "../Utils/HoverComponent";
-import dynamic from "next/dynamic";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

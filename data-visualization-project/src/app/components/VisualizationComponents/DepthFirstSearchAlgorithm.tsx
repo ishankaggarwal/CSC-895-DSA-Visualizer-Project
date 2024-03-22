@@ -1,9 +1,3 @@
-import {
-  BubbleSortArrayVisualizationAnimationInterface,
-  BubbleSortArrayVisualizationInterface,
-} from "@/app/interfaces/BubbleSortArrayVIsualizationInterface";
-import { BubbleSort } from "@/app/visualization-algorithms/bubblesort";
-import { InsertionSort } from "@/app/visualization-algorithms/insertionsort";
 import AppContext from "@/context";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -241,8 +235,8 @@ const DepthFirstSearchAlgorithmVisualizer = () => {
                     path="straight"
                     labels={{
                       middle:
-                        (visualizationOption !== 0 &&
-                        visualizationOption !== 1) ? (
+                        visualizationOption !== 0 &&
+                        visualizationOption !== 1 ? (
                           <div
                             style={{
                               position: "absolute",

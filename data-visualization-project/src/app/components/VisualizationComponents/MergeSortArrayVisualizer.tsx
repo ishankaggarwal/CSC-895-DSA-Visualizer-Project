@@ -106,15 +106,12 @@ const MergeSortVisualizer = () => {
     const arrayTree = new DivideAndConquerArray(arr, "mergesort");
     setHeight(arrayTree.returnHeight());
     setWidth(arrayTree.returnWidth());
-    console.log(arrayTree.nodes);
     setNodes(arrayTree.nodes);
-    console.log(arrayTree.distance);
     setBarHeight(arrayTree.distance / Math.max(...arr));
     divideAndConquerTree.current = arrayTree;
   };
 
   const visualizeTree = async (array: number[]) => {
-    console.log(array);
     let animations: MergeSortArrayVisualizationAnimationInterface[] = [];
     if (divideAndConquerTree.current !== undefined) {
       mergeSort(
@@ -126,7 +123,6 @@ const MergeSortVisualizer = () => {
         animations
       );
     }
-    console.log(animations);
     if (animationsRef.current.length > 0) {
       setAnimations([]);
       createTree(input);
@@ -142,10 +138,8 @@ const MergeSortVisualizer = () => {
       if (isPlayingRef.current) {
         const animation = animationsRef.current.shift();
         let newNodes = [...nodes];
-        console.log(newNodes);
         if (animation) {
           const { nodeTrees, currentLineMarkers } = animation;
-          console.log(nodeTrees);
           for (let i = 0; i < newNodes.length; i++) {
             for (let j = 0; j < nodeTrees.length; j++) {
               if (newNodes[i].id === nodeTrees[j].id) {
@@ -154,7 +148,6 @@ const MergeSortVisualizer = () => {
                 newNodes[i].value = nodeTrees[j].value;
                 newNodes[i].indexI = nodeTrees[j].indexI;
                 newNodes[i].indexJ = nodeTrees[j].indexJ;
-                console.log(newNodes[i].value);
               }
             }
           }
@@ -213,23 +206,29 @@ const MergeSortVisualizer = () => {
                         alignSelf: "flex-end",
                       }}
                     >
-                          <div
-                            style={{
-                              width: "100%",
-                              height: value * barHeight,
-                              backgroundColor:  index === node.indexI
-                              ? node.colorI === 'transparent' ? 'green' : node.colorI
+                      <div
+                        style={{
+                          width: "100%",
+                          height: value * barHeight,
+                          backgroundColor:
+                            index === node.indexI
+                              ? node.colorI === "transparent"
+                                ? "green"
+                                : node.colorI
                               : index === node.indexJ
-                              ? node.colorJ === 'transparent' ? 'green' : node.colorJ
+                              ? node.colorJ === "transparent"
+                                ? "green"
+                                : node.colorJ
                               : "green",
-                            }}
-                            onMouseOver={(e)=>{
-                              handleMouseEnter(e,value);
-                          }}      onMouseMove={(e)=>{
-                              handleMouseEnter(e,value);
-                          }}
-                          onMouseLeave={handleMouseLeave}
-                          ></div>
+                        }}
+                        onMouseOver={(e) => {
+                          handleMouseEnter(e, value);
+                        }}
+                        onMouseMove={(e) => {
+                          handleMouseEnter(e, value);
+                        }}
+                        onMouseLeave={handleMouseLeave}
+                      ></div>
                       <div
                         style={{
                           padding: "3px",

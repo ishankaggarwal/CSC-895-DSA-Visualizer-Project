@@ -1,7 +1,6 @@
 import { SelectionSortArrayVisualizationAnimationInterface } from "../interfaces/SelectionSortArrayVisualizationInterface";
 
 export const SelectionSort = (array: number[]) => {
-  console.log(array);
   let animations: SelectionSortArrayVisualizationAnimationInterface[] = [];
   const n = array.length;
   let swap = 0;

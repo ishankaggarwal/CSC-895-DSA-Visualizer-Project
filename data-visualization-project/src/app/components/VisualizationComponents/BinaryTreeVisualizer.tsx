@@ -97,7 +97,6 @@ const BinaryTreeVisualizer = () => {
   }, [input]);
 
   useEffect(() => {
-    console.log(initialCreateRef.current);
     if (initialCreateRef.current) {
       getWidthAndHeightOfNodes();
     }
@@ -138,9 +137,7 @@ const BinaryTreeVisualizer = () => {
         });
     });
     const links = binaryTreeRef.current?.createLinks(nodesWidthAndHeight);
-    console.log(links);
     if (links) {
-      console.log("Links Set");
       setLinks(links);
     }
   };

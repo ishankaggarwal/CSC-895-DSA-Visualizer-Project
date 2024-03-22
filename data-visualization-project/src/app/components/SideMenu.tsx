@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Accordion, Button, Dropdown, ListGroup } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
 import "../../../styles/sideMenu.css";
 import AppContext from "@/context";
 

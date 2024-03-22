@@ -3,16 +3,11 @@ import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
-import { traverseTreeInorder } from "@/app/visualization-algorithms/inordertraversal";
-import { traverseTreePreorder } from "@/app/visualization-algorithms/preordertraversal";
-import { traverseTreePostOrder } from "@/app/visualization-algorithms/postorder";
-import { MergeSortArrayVisualizationAnimationInterface } from "@/app/interfaces/MergeSortArrayVisualizationInterface";
 import {
   DivideAndConquerArray,
   Link,
   NodeTree,
 } from "../Utils/DivideAndConquerArrayTree";
-import { mergeSort } from "@/app/visualization-algorithms/mergesort";
 import {
   Pivot,
   QuickSortArrayVisualizationAnimationInterface,
@@ -198,7 +193,6 @@ const QuickSortVisualizer = () => {
         animations
       );
     }
-    console.log(animations);
     if (animationsRef.current.length > 0) {
       setAnimations([]);
       createTree(input);
@@ -243,7 +237,6 @@ const QuickSortVisualizer = () => {
             pivotIndex: pivotIndex,
           };
           newMap.set(pivotId, newPivot);
-          console.log(newMap);
           setPivotMap(newMap);
           setMarkers(currentLineMarkers);
           setNodes(newNodes);
@@ -309,18 +302,24 @@ const QuickSortVisualizer = () => {
                             style={{
                               width: "100%",
                               height: value * barHeight,
-                              backgroundColor:  index === node.indexI
-                              ? node.colorI === 'transparent' ? 'green' : node.colorI
-                              : index === node.indexJ
-                              ? node.colorJ === 'transparent' ? 'green' : node.colorJ
-                              : "green",
+                              backgroundColor:
+                                index === node.indexI
+                                  ? node.colorI === "transparent"
+                                    ? "green"
+                                    : node.colorI
+                                  : index === node.indexJ
+                                  ? node.colorJ === "transparent"
+                                    ? "green"
+                                    : node.colorJ
+                                  : "green",
                             }}
-                            onMouseOver={(e)=>{
-                              handleMouseEnter(e,value);
-                          }}      onMouseMove={(e)=>{
-                              handleMouseEnter(e,value);
-                          }}
-                          onMouseLeave={handleMouseLeave}
+                            onMouseOver={(e) => {
+                              handleMouseEnter(e, value);
+                            }}
+                            onMouseMove={(e) => {
+                              handleMouseEnter(e, value);
+                            }}
+                            onMouseLeave={handleMouseLeave}
                           ></div>
                           <div
                             style={{

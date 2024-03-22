@@ -6,10 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
-import dynamic from 'next/dynamic';
 
 const inter = Inter({ subsets: ["latin"] });
-
 
 export default function RootLayout({
   children,
