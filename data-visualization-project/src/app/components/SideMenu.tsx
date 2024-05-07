@@ -77,7 +77,7 @@ export const items = [
         subCategoryValue: 1,
       },
       {
-        subCategoryName: "Djikstra Algorithm",
+        subCategoryName: "Dijkstra Algorithm",
         subCategoryValue: 2,
       },
       {
